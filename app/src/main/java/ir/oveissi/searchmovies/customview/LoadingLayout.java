@@ -20,6 +20,7 @@ public class LoadingLayout extends RelativeLayout {
     public Context mContext;
     public  ProgressBar pb;
     public View mainLayout;
+    private int mState;
 
 
     public LoadingLayout(Context context) {
@@ -57,6 +58,7 @@ public class LoadingLayout extends RelativeLayout {
 
     public void setState(int mState)
     {
+        this.mState = mState;
         if(mState==STATE_LOADING)
         {
             mainLayout.setVisibility(GONE);
@@ -74,4 +76,7 @@ public class LoadingLayout extends RelativeLayout {
         }
     }
 
+    public int getState() {
+        return mState;
+    }
 }
