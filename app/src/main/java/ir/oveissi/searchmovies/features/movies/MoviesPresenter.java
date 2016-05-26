@@ -87,6 +87,12 @@ public class MoviesPresenter implements MoviesContract.Presenter {
 
     }
 
+    @Override
+    public void performSearch(String terms) {
+        mtView.clearMovies();
+        getMoviesByTitle(terms,1);
+    }
+
 //    @Override
 //    public void result(int requestCode, int resultCode) {
 //        // If a task was successfully added, show snackbar

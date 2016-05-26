@@ -29,6 +29,7 @@ import java.util.List;
 
 import ir.oveissi.searchmovies.R;
 import ir.oveissi.searchmovies.adapters.MoviesAdapter;
+import ir.oveissi.searchmovies.customview.SearchView;
 import ir.oveissi.searchmovies.data.Movie;
 import ir.oveissi.searchmovies.utils.EndlessRecyclerOnScrollListener;
 
@@ -75,18 +76,29 @@ public class MoviesFragment extends Fragment implements MoviesContract.View {
 //    }
 
     RecyclerView rv;
-    public String title="Batman";
+    SearchView mSearchView;
+    public String title="";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_movies, container, false);
         rv=(RecyclerView)root.findViewById(R.id.rvMovies);
+        mSearchView=(SearchView)root.findViewById(R.id.svMovies);
+
+
         rv.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
         mListAdapter=new MoviesAdapter(getActivity(), new ArrayList<Movie>());
         rv.setAdapter(mListAdapter);
-        mPresenter.getMoviesByTitle(title,1);
 
+
+        mSearchView.setListener(new SearchView.performSearchListener() {
+            @Override
+            public void performSearch(String terms) {
+                title=terms;
+                mPresenter.performSearch(terms);
+            }
+        });
 
         rv.addOnScrollListener(new EndlessRecyclerOnScrollListener((LinearLayoutManager) rv.getLayoutManager()) {
             @Override
@@ -96,6 +108,11 @@ public class MoviesFragment extends Fragment implements MoviesContract.View {
         });
 
         return root;
+    }
+
+    public void clearMovies()
+    {
+        mListAdapter.clear();
     }
 
     @Override

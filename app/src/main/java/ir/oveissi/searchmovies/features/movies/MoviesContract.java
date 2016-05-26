@@ -14,11 +14,13 @@ public interface MoviesContract {
     interface View extends BaseView<Presenter> {
 
         void showMoreMovies(List<Movie> tasks);
-
+        void clearMovies();
     }
 
     interface Presenter extends BasePresenter {
 
         void getMoviesByTitle(String title,int page);
+
+        void performSearch(String terms);
     }
 }

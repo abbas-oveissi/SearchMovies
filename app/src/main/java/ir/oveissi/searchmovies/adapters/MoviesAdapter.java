@@ -24,6 +24,11 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         this.itemsData = itemsData;
     }
 
+    public void clear()
+    {
+        this.itemsData.clear();
+        notifyDataSetChanged();
+    }
     public void addItem(Movie post)
     {
         this.itemsData.add(post);
