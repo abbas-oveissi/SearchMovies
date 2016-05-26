@@ -75,6 +75,7 @@ public class MoviesPresenter implements MoviesContract.Presenter {
                             Log.d(TAG, "onError StatusCode: "+((HttpException) e).code());
                         }
                         Log.d(TAG, "onError");
+                        mtView.showToast("خطا رخ داد.");
                     }
 
                     @Override
