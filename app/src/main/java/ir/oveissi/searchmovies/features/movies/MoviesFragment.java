@@ -133,8 +133,8 @@ public class MoviesFragment extends Fragment implements MoviesContract.View {
 
     public void hideLoadingForMovies()
     {
-        loadinglayout.setState(LoadingLayout.STATE_SHOW_DATA);
-
+        if(loadinglayout.getState()!=LoadingLayout.STATE_SHOW_DATA)
+            loadinglayout.setState(LoadingLayout.STATE_SHOW_DATA);
     }
 
     @Override
