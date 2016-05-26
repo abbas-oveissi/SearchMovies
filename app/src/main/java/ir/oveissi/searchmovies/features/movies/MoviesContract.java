@@ -14,7 +14,10 @@ public interface MoviesContract {
     interface View extends BaseView<Presenter> {
 
         void showMoreMovies(List<Movie> tasks);
+
         void clearMovies();
+
+        void showToast(String txt);
     }
 
     interface Presenter extends BasePresenter {

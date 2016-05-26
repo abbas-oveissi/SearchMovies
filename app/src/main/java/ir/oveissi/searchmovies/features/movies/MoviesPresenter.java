@@ -89,6 +89,11 @@ public class MoviesPresenter implements MoviesContract.Presenter {
 
     @Override
     public void performSearch(String terms) {
+        if(terms.length()<=3)
+        {
+            mtView.showToast("لطفا بیشتر از 3 کاراکتر وارد کنید.");
+            return;
+        }
         mtView.clearMovies();
         getMoviesByTitle(terms,1);
     }
