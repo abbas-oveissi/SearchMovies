@@ -80,6 +80,7 @@ public class MoviesPresenter implements MoviesContract.Presenter {
                     @Override
                     public void onNext(List<Movie> movies) {
                         Log.d(TAG, "onNext");
+                        mtView.hideLoadingForMovies();
                         mtView.showMoreMovies(movies);
                     }
                 })
@@ -94,6 +95,7 @@ public class MoviesPresenter implements MoviesContract.Presenter {
             mtView.showToast("لطفا بیشتر از 3 کاراکتر وارد کنید.");
             return;
         }
+        mtView.showLoadingForMovies();
         mtView.clearMovies();
         getMoviesByTitle(terms,1);
     }

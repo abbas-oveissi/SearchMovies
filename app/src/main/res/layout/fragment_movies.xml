@@ -13,8 +13,14 @@
         android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="1dp"/>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvMovies"
+    <ir.oveissi.searchmovies.customview.LoadingLayout
+        android:id="@+id/loadinglayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvMovies"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </ir.oveissi.searchmovies.customview.LoadingLayout>
+
 </LinearLayout>

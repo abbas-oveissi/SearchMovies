@@ -30,6 +30,7 @@ import java.util.List;
 
 import ir.oveissi.searchmovies.R;
 import ir.oveissi.searchmovies.adapters.MoviesAdapter;
+import ir.oveissi.searchmovies.customview.LoadingLayout;
 import ir.oveissi.searchmovies.customview.SearchView;
 import ir.oveissi.searchmovies.data.Movie;
 import ir.oveissi.searchmovies.utils.EndlessRecyclerOnScrollListener;
@@ -78,6 +79,7 @@ public class MoviesFragment extends Fragment implements MoviesContract.View {
 
     RecyclerView rv;
     SearchView mSearchView;
+    LoadingLayout loadinglayout;
     public String title="";
 
     @Override
@@ -86,7 +88,8 @@ public class MoviesFragment extends Fragment implements MoviesContract.View {
         View root = inflater.inflate(R.layout.fragment_movies, container, false);
         rv=(RecyclerView)root.findViewById(R.id.rvMovies);
         mSearchView=(SearchView)root.findViewById(R.id.svMovies);
-
+        loadinglayout=(LoadingLayout)root.findViewById(R.id.loadinglayout);
+        loadinglayout.setState(LoadingLayout.STATE_SHOW_DATA);
 
         rv.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
         mListAdapter=new MoviesAdapter(getActivity(), new ArrayList<Movie>());
@@ -119,6 +122,19 @@ public class MoviesFragment extends Fragment implements MoviesContract.View {
     @Override
     public void showToast(String txt) {
         Toast.makeText(getActivity(), txt, Toast.LENGTH_SHORT).show();
+    }
+
+
+    public void showLoadingForMovies()
+    {
+        loadinglayout.setState(LoadingLayout.STATE_LOADING);
+
+    }
+
+    public void hideLoadingForMovies()
+    {
+        loadinglayout.setState(LoadingLayout.STATE_SHOW_DATA);
+
     }
 
     @Override

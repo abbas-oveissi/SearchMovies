@@ -18,6 +18,11 @@ public interface MoviesContract {
         void clearMovies();
 
         void showToast(String txt);
+
+        void showLoadingForMovies();
+
+        void hideLoadingForMovies();
+
     }
 
     interface Presenter extends BasePresenter {
