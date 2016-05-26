@@ -2,6 +2,7 @@ package ir.oveissi.searchmovies.features.movies;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
 import ir.oveissi.searchmovies.R;
 import ir.oveissi.searchmovies.data.source.MovieRepository;
@@ -16,6 +17,8 @@ public class MoviesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movies);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.myToolbar);
+        setSupportActionBar(toolbar);
 
         MoviesFragment mFragment =(MoviesFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if (mFragment == null) {
