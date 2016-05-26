@@ -1,5 +1,6 @@
 package ir.oveissi.searchmovies.customview;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -8,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -53,6 +55,10 @@ public class SearchView extends RelativeLayout {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    if(((Activity)mContext).getCurrentFocus()!=null && ((Activity)mContext).getCurrentFocus() instanceof EditText){
+                        InputMethodManager imm = (InputMethodManager)mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(etTerms.getWindowToken(), 0);
+                    }
                     if(listener!=null)
                         listener.performSearch(etTerms.getText().toString());
                     return true;
