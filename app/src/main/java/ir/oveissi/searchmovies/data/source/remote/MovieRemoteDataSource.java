@@ -64,12 +64,12 @@ public class MovieRemoteDataSource implements MovieDataSource {
     @Override
     public Observable<List<Movie>> getMoviesByTitle(String title,Integer page) {
         return ApiClient.getClient().create(ApiInterface.class).getMoviesByTitle(title,page)
-                .flatMap(new Func1<TmpMovies,Observable<List<Movie>>>() {
-                @Override
-                public Observable<List<Movie>> call(TmpMovies mMovies) {
-                    return Observable.from(mMovies.Search).toList();
-                }
-        });
+                .map(new Func1<TmpMovies, List<Movie>>() {
+                    @Override
+                    public List<Movie> call(TmpMovies tmpMovies) {
+                        return tmpMovies.Search;
+                    }
+                });
     }
 
     @Override
