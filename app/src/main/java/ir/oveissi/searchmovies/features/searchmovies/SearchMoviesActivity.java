@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ir.oveissi.searchmovies.R;
-import ir.oveissi.searchmovies.customview.LoadingLayout;
-import ir.oveissi.searchmovies.customview.SearchView;
+import ir.oveissi.searchmovies.customviews.LoadingLayout;
+import ir.oveissi.searchmovies.customviews.SearchView;
 import ir.oveissi.searchmovies.interactors.MovieInteractor;
 import ir.oveissi.searchmovies.interactors.MovieInteractorImpl;
 import ir.oveissi.searchmovies.interactors.remote.ApiClient;
