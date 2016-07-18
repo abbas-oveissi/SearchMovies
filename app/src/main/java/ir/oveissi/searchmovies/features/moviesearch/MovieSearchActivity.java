@@ -51,7 +51,7 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
         loadinglayout.setState(LoadingLayout.STATE_SHOW_DATA);
 
         rv.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
-        mListAdapter=new MovieSearchAdapter(this, new ArrayList<Movie>());
+        mListAdapter=new MovieSearchAdapter(MovieSearchActivity.this, new ArrayList<Movie>());
         rv.setAdapter(mListAdapter);
 
 

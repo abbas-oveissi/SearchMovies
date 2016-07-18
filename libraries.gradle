@@ -19,6 +19,7 @@ ext {
     gsonVersion = "2.6.2"
     picassoVersion = "2.5.2"
     percentSupportVersion="23.4.0"
+    glideVersion="3.7.0"
 
 
 
@@ -38,6 +39,7 @@ ext {
 
 
     libraries = [
+            glide   : "com.github.bumptech.glide:glide:${glideVersion}",
             androidSupport   : "com.android.support:support-v4:${androidSupportVersion}",
             gson   : "com.google.code.gson:gson:${gsonVersion}",
             picasso   : "com.squareup.picasso:picasso:${picassoVersion}",

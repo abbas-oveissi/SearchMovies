@@ -11,35 +11,33 @@
         android:layout_width="match_parent"
         android:minHeight="?attr/actionBarSize"
         android:layout_height="wrap_content"/>
-    <ir.oveissi.searchmovies.customviews.LoadingLayout
-        android:id="@+id/loadinglayout"
-        android:padding="16dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <ImageView
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="5dp"
-                android:id="@+id/imPoster"
-                android:layout_width="150dp"
-                android:layout_height="200dp" />
-            <TextView
-                android:id="@+id/tvMovieTitle"
-                android:text="title"
-                android:layout_margin="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:id="@+id/tvOverview"
-                android:text="overview"
-                android:layout_margin="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
 
-        </LinearLayout>
-    </ir.oveissi.searchmovies.customviews.LoadingLayout>
+    <ImageView
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="5dp"
+        android:id="@+id/imPoster"
+        android:transitionName="imPoster"
+        android:layout_width="150dp"
+        android:layout_height="200dp" />
+
+    <TextView
+        android:id="@+id/tvMovieTitle"
+        android:text="title"
+        android:layout_margin="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+
+
+
+    <TextView
+        android:id="@+id/tvOverview"
+        android:text="overview"
+        android:layout_margin="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
 
 </LinearLayout>

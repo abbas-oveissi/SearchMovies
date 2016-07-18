@@ -49,7 +49,6 @@ public class MovieDetailPresenter implements MovieDetailContract.Presenter {
 
     @Override
     public void getMovieDetailFromWebservice(String id) {
-                mtView.showLoadingLayout();
                 Subscription mSubscription=
                 mMovieInteractor.getMovieByID(id)
                 .subscribe(new Observer<Movie>() {
@@ -69,7 +68,6 @@ public class MovieDetailPresenter implements MovieDetailContract.Presenter {
                     @Override
                     public void onNext(Movie movie) {
                         Log.d(TAG, "onNext");
-                        mtView.hideLoadingLayout();
                         mtView.showMovieDetail(movie);
                     }
                 });

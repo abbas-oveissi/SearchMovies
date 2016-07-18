@@ -19,6 +19,7 @@
             android:layout_height="90dp"
             android:id="@+id/imPoster"
             android:scaleType="fitXY"
+            android:transitionName="imPoster"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="16dp" />

@@ -14,9 +14,7 @@ public interface MovieDetailContract {
 
         void showMovieDetail(Movie movie);
 
-        void hideLoadingLayout();
 
-        void showLoadingLayout();
     }
 
     interface Presenter extends BasePresenter {
