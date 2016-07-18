@@ -1,5 +1,6 @@
-package ir.oveissi.searchmovies.data.source.remote;
+package ir.oveissi.searchmovies.interactors.remote;
 
+import ir.oveissi.searchmovies.utils.Constants;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -11,13 +12,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ApiClient {
 
-    public static final String BASE_URL = "http://www.omdbapi.com/";
-    private static Retrofit retrofit = null;
+    private static ApiInterface retrofit = null;
 
 
-    public static Retrofit getClient() {
+    public static ApiInterface getClient() {
         if (retrofit==null) {
-
             OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
             HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
@@ -27,14 +26,12 @@ public class ApiClient {
             httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
             builder.networkInterceptors().add(httpLoggingInterceptor);
 
-
-
             retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
+                    .baseUrl(Constants.BASE_URL)
                     .client(builder.build())
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
-                    .build();
+                    .build().create(ApiInterface.class);
         }
         return retrofit;
     }

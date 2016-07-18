@@ -1,0 +1,69 @@
+/*
+ * Copyright 2016, The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package ir.oveissi.searchmovies.interactors;
+
+
+import java.util.List;
+
+import ir.oveissi.searchmovies.interactors.remote.SearchMoviesApiService;
+import ir.oveissi.searchmovies.pojo.Movie;
+import ir.oveissi.searchmovies.pojo.TmpMovies;
+import ir.oveissi.searchmovies.utils.SchedulerProvider;
+import rx.Observable;
+import rx.functions.Func1;
+
+
+public class MovieInteractorImpl implements MovieInteractor {
+
+    private static MovieInteractor INSTANCE;
+
+    public static MovieInteractor getInstance(SearchMoviesApiService searchMoviesApiService, SchedulerProvider scheduler) {
+        if (INSTANCE == null) {
+            INSTANCE = new MovieInteractorImpl(searchMoviesApiService,scheduler);
+        }
+        return INSTANCE;
+    }
+
+    private final SearchMoviesApiService searchMoviesApiService;
+    private final SchedulerProvider scheduler;
+
+    private MovieInteractorImpl(SearchMoviesApiService searchMoviesApiService, SchedulerProvider scheduler) {
+        this.searchMoviesApiService = searchMoviesApiService;
+        this.scheduler = scheduler;
+    }
+
+    @Override
+    public Observable<List<Movie>> getMoviesByTitle(String title,Integer page) {
+        return this.searchMoviesApiService.getMoviesByTitle(title,page)
+                .map(new Func1<TmpMovies, List<Movie>>() {
+                    @Override
+                    public List<Movie> call(TmpMovies tmpMovies) {
+                        return tmpMovies.results;
+                    }
+                })
+                .subscribeOn(scheduler.backgroundThread())
+                .observeOn(scheduler.mainThread());
+    }
+
+    @Override
+    public Observable<Movie> getMovieByID( String movieId) {
+        return this.getMovieByID(movieId)
+                .subscribeOn(scheduler.backgroundThread())
+                .observeOn(scheduler.mainThread());
+    }
+
+}

@@ -1,15 +1,15 @@
-package ir.oveissi.searchmovies.features.movies;
+package ir.oveissi.searchmovies.features.searchmovies;
 
 import java.util.List;
 
-import ir.oveissi.searchmovies.BasePresenter;
-import ir.oveissi.searchmovies.BaseView;
-import ir.oveissi.searchmovies.data.Movie;
+import ir.oveissi.searchmovies.utils.BasePresenter;
+import ir.oveissi.searchmovies.utils.BaseView;
+import ir.oveissi.searchmovies.pojo.Movie;
 
 /**
  * Created by Abbas on 24/05/2016.
  */
-public interface MoviesContract {
+public interface SearchMoviesContract {
 
     interface View extends BaseView<Presenter> {
 

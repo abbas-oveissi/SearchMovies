@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package ir.oveissi.searchmovies;
+package ir.oveissi.searchmovies.utils;
 
-public interface BaseView<T> {
+public interface BasePresenter {
 
-    void setPresenter(T presenter);
+    void subscribe();
+
+    void unsubscribe();
 
 }

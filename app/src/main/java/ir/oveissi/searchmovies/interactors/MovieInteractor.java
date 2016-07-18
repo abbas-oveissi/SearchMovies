@@ -14,12 +14,21 @@
  * limitations under the License.
  */
 
-package ir.oveissi.searchmovies;
+package ir.oveissi.searchmovies.interactors;
 
-public interface BasePresenter {
+import java.util.List;
 
-    void subscribe();
+import ir.oveissi.searchmovies.pojo.Movie;
+import rx.Observable;
 
-    void unsubscribe();
+/**
+ * Main entry point for accessing tasks data.
+ * <p>
+ */
+public interface MovieInteractor {
+
+    Observable<List<Movie>> getMoviesByTitle(String query,Integer page);
+
+    Observable<Movie> getMovieByID( String id);
 
 }

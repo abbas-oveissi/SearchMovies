@@ -1,4 +1,4 @@
-package ir.oveissi.searchmovies.adapters;
+package ir.oveissi.searchmovies.features.searchmovies;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -13,13 +13,14 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import ir.oveissi.searchmovies.R;
-import ir.oveissi.searchmovies.data.Movie;
+import ir.oveissi.searchmovies.pojo.Movie;
+import ir.oveissi.searchmovies.utils.Constants;
 
-public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder> {
+public class SearchMoviesAdapter extends RecyclerView.Adapter<SearchMoviesAdapter.ViewHolder> {
     private Context mContext;
     private List<Movie> itemsData;
 
-    public MoviesAdapter(Context mContext,List<Movie> itemsData) {
+    public SearchMoviesAdapter(Context mContext, List<Movie> itemsData) {
         this.mContext = mContext;
         this.itemsData = itemsData;
     }
@@ -36,7 +37,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
     }
 
     @Override
-    public MoviesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public SearchMoviesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemLayoutView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.row_movie,  parent, false);
         ViewHolder viewHolder = new ViewHolder(itemLayoutView);
@@ -46,10 +47,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
 
-        viewHolder.tvMovieTitle.setText(itemsData.get(position).Title);
-        viewHolder.tvMovieType.setText(itemsData.get(position).Type);
+        viewHolder.tvMovieTitle.setText(itemsData.get(position).original_title);
+        viewHolder.tvMovieType.setText(itemsData.get(position).overview);
         Picasso.with(mContext)
-                .load(itemsData.get(position).Poster)
+                .load(Constants.BASE_IMAGE_URL+itemsData.get(position).poster_path)
                 .placeholder(R.drawable.placeholder)
                 .into(viewHolder.imPoster);
 

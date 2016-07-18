@@ -14,21 +14,10 @@
  * limitations under the License.
  */
 
-package ir.oveissi.searchmovies.data.source;
+package ir.oveissi.searchmovies.utils;
 
-import java.util.List;
+public interface BaseView<T> {
 
-import ir.oveissi.searchmovies.data.Movie;
-import rx.Observable;
-
-/**
- * Main entry point for accessing tasks data.
- * <p>
- */
-public interface MovieDataSource {
-
-    Observable<List<Movie>> getMoviesByTitle(String title,Integer page);
-
-    Observable<Movie> getMovieByID( String movieId);
+    void setPresenter(T presenter);
 
 }
