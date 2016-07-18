@@ -30,6 +30,6 @@ public class SearchMoviesApiServiceImpl implements SearchMoviesApiService{
 
     @Override
     public Observable<Movie> getMovieById(String id) {
-        return api.getMovieById(Constants.API_KEY,id);
+        return api.getMovieById(id,Constants.API_KEY);
     }
 }

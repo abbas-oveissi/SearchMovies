@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/myToolbar"
+        app:titleTextColor="#FFFF"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:minHeight="?attr/actionBarSize"
+        android:layout_height="wrap_content"/>
+    <ir.oveissi.searchmovies.customviews.LoadingLayout
+        android:id="@+id/loadinglayout"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="5dp"
+                android:id="@+id/imPoster"
+                android:layout_width="150dp"
+                android:layout_height="200dp" />
+            <TextView
+                android:id="@+id/tvMovieTitle"
+                android:text="title"
+                android:layout_margin="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tvOverview"
+                android:text="overview"
+                android:layout_margin="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </ir.oveissi.searchmovies.customviews.LoadingLayout>
+
+</LinearLayout>

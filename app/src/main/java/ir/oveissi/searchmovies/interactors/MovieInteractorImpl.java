@@ -61,7 +61,7 @@ public class MovieInteractorImpl implements MovieInteractor {
 
     @Override
     public Observable<Movie> getMovieByID( String movieId) {
-        return this.getMovieByID(movieId)
+        return this.searchMoviesApiService.getMovieById(movieId)
                 .subscribeOn(scheduler.backgroundThread())
                 .observeOn(scheduler.mainThread());
     }

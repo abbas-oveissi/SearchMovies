@@ -1,4 +1,4 @@
-package ir.oveissi.searchmovies.features.searchmovies;
+package ir.oveissi.searchmovies.features.moviesearch;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import ir.oveissi.searchmovies.pojo.Movie;
 /**
  * Created by Abbas on 24/05/2016.
  */
-public interface SearchMoviesContract {
+public interface MovieSearchContract {
 
     interface View extends BaseView<Presenter> {
 

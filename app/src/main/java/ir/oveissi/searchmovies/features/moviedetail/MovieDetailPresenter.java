@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-package ir.oveissi.searchmovies.features.searchmovies;
+package ir.oveissi.searchmovies.features.moviedetail;
 
 import android.util.Log;
-
-import java.util.List;
 
 import ir.oveissi.searchmovies.interactors.MovieInteractor;
 import ir.oveissi.searchmovies.pojo.Movie;
@@ -27,15 +25,14 @@ import rx.Observer;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
-public class SearchMoviesPresenter implements SearchMoviesContract.Presenter {
+public class MovieDetailPresenter implements MovieDetailContract.Presenter {
 
     private final MovieInteractor mMovieInteractor;
-    private final SearchMoviesContract.View mtView;
+    private final MovieDetailContract.View mtView;
     private CompositeSubscription mSubscriptions;
-    private static final String TAG="SearchMoviesPresenter";
+    private static final String TAG="MovieSearchPresenter";
 
-    //
-    public SearchMoviesPresenter(MovieInteractor mMovieInteractor, SearchMoviesContract.View tView) {
+    public MovieDetailPresenter(MovieInteractor mMovieInteractor, MovieDetailContract.View tView) {
         this.mMovieInteractor = mMovieInteractor;
         this.mtView = tView;
         mSubscriptions = new CompositeSubscription();
@@ -51,10 +48,11 @@ public class SearchMoviesPresenter implements SearchMoviesContract.Presenter {
     }
 
     @Override
-    public void getMoviesByTitle(String title,int page) {
-        Subscription mSubscription=
-                mMovieInteractor.getMoviesByTitle(title,page)
-                .subscribe(new Observer<List<Movie>>() {
+    public void getMovieDetailFromWebservice(String id) {
+                mtView.showLoadingLayout();
+                Subscription mSubscription=
+                mMovieInteractor.getMovieByID(id)
+                .subscribe(new Observer<Movie>() {
                     @Override
                     public void onCompleted() {
                         Log.d(TAG, "onCompleted: ");
@@ -66,28 +64,18 @@ public class SearchMoviesPresenter implements SearchMoviesContract.Presenter {
                             Log.d(TAG, "onError StatusCode: "+((HttpException) e).code());
                         }
                         Log.d(TAG, "onError");
-                        mtView.showToast("خطا رخ داد.");
                     }
 
                     @Override
-                    public void onNext(List<Movie> movies) {
+                    public void onNext(Movie movie) {
                         Log.d(TAG, "onNext");
-                        mtView.hideLoadingForMovies();
-                        mtView.showMoreMovies(movies);
+                        mtView.hideLoadingLayout();
+                        mtView.showMovieDetail(movie);
                     }
                 });
         mSubscriptions.add(mSubscription);
     }
 
-    @Override
-    public void performSearch(String terms) {
-        if(terms.length()<=2)
-        {
-            mtView.showToast("لطفا بیشتر از 2 کاراکتر وارد کنید.");
-            return;
-        }
-        mtView.showLoadingForMovies();
-        mtView.clearMovies();
-        getMoviesByTitle(terms,1);
-    }
+
+
 }

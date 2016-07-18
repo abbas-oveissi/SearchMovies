@@ -1,4 +1,4 @@
-package ir.oveissi.searchmovies.features.searchmovies;
+package ir.oveissi.searchmovies.features.moviesearch;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -21,10 +21,10 @@ import ir.oveissi.searchmovies.pojo.Movie;
 import ir.oveissi.searchmovies.utils.EndlessRecyclerOnScrollListener;
 import ir.oveissi.searchmovies.utils.SchedulerProviderImpl;
 
-public class SearchMoviesActivity extends AppCompatActivity implements SearchMoviesContract.View {
+public class MovieSearchActivity extends AppCompatActivity implements MovieSearchContract.View {
 
-    private SearchMoviesPresenter mPresenter;
-    private SearchMoviesAdapter mListAdapter;
+    private MovieSearchPresenter mPresenter;
+    private MovieSearchAdapter mListAdapter;
     RecyclerView rv;
     SearchView mSearchView;
     LoadingLayout loadinglayout;
@@ -34,7 +34,7 @@ public class SearchMoviesActivity extends AppCompatActivity implements SearchMov
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_movies);
+        setContentView(R.layout.activity_movie_search);
         Toolbar toolbar = (Toolbar) findViewById(R.id.myToolbar);
         setSupportActionBar(toolbar);
 
@@ -51,7 +51,7 @@ public class SearchMoviesActivity extends AppCompatActivity implements SearchMov
         loadinglayout.setState(LoadingLayout.STATE_SHOW_DATA);
 
         rv.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
-        mListAdapter=new SearchMoviesAdapter(this, new ArrayList<Movie>());
+        mListAdapter=new MovieSearchAdapter(this, new ArrayList<Movie>());
         rv.setAdapter(mListAdapter);
 
 
@@ -75,7 +75,7 @@ public class SearchMoviesActivity extends AppCompatActivity implements SearchMov
                 SearchMoviesApiServiceImpl.getInstance(ApiClient.getClient()),
                 new SchedulerProviderImpl());
 
-        mPresenter = new SearchMoviesPresenter(mvInteractor,this);
+        mPresenter = new MovieSearchPresenter(mvInteractor,this);
 
     }
 
@@ -110,11 +110,6 @@ public class SearchMoviesActivity extends AppCompatActivity implements SearchMov
         {
             mListAdapter.addItem(p);
         }
-    }
-
-    @Override
-    public void setPresenter(SearchMoviesContract.Presenter presenter) {
-
     }
 
     @Override

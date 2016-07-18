@@ -18,5 +18,5 @@ public interface ApiInterface {
 
         //http://api.themoviedb.org/3/movie/[ID]/movie?api_key=[API_KEY]
         @GET("movie/{id}")
-        Observable<Movie> getMovieById(@Query("api_key") String apiKey,@Path("id") String id);
+        Observable<Movie> getMovieById(@Path("id") String id,@Query("api_key") String apiKey);
 }
