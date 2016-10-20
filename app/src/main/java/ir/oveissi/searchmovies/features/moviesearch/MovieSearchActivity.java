@@ -10,20 +10,20 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import ir.oveissi.searchmovies.R;
-import ir.oveissi.searchmovies.customviews.LoadingLayout;
-import ir.oveissi.searchmovies.customviews.SearchView;
-import ir.oveissi.searchmovies.interactors.MovieInteractor;
-import ir.oveissi.searchmovies.interactors.MovieInteractorImpl;
-import ir.oveissi.searchmovies.interactors.remote.ApiClient;
-import ir.oveissi.searchmovies.interactors.remote.SearchMoviesApiServiceImpl;
+import ir.oveissi.searchmovies.SearchMovieApplication;
 import ir.oveissi.searchmovies.pojo.Movie;
 import ir.oveissi.searchmovies.utils.EndlessRecyclerOnScrollListener;
-import ir.oveissi.searchmovies.utils.SchedulerProviderImpl;
+import ir.oveissi.searchmovies.utils.customviews.LoadingLayout;
+import ir.oveissi.searchmovies.utils.customviews.SearchView;
 
 public class MovieSearchActivity extends AppCompatActivity implements MovieSearchContract.View {
 
-    private MovieSearchPresenter mPresenter;
+    @Inject
+    public MovieSearchPresenter mPresenter;
+
     private MovieSearchAdapter mListAdapter;
     RecyclerView rv;
     SearchView mSearchView;
@@ -33,17 +33,12 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SearchMovieApplication.getComponent().plus(new MovieSearchPresenterModule(this)).inject(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_search);
         Toolbar toolbar = (Toolbar) findViewById(R.id.myToolbar);
         setSupportActionBar(toolbar);
-
-//        MoviesFragment mFragment =(MoviesFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
-//        if (mFragment == null) {
-//            mFragment = MoviesFragment.newInstance();
-//            ActivityUtils.addFragmentToActivity(
-//                    getSupportFragmentManager(), mFragment, R.id.content_frame);
-//        }
 
         rv=(RecyclerView)findViewById(R.id.rvMovies);
         mSearchView=(SearchView)findViewById(R.id.svMovies);
@@ -69,13 +64,6 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
                 mPresenter.getMoviesByTitle(title,current_page);
             }
         });
-
-
-        MovieInteractor mvInteractor = MovieInteractorImpl.getInstance(
-                SearchMoviesApiServiceImpl.getInstance(ApiClient.getClient()),
-                new SchedulerProviderImpl());
-
-        mPresenter = new MovieSearchPresenter(mvInteractor,this);
 
     }
 

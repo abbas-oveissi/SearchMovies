@@ -1,5 +1,7 @@
 package ir.oveissi.searchmovies.interactors.remote;
 
+import javax.inject.Inject;
+
 import ir.oveissi.searchmovies.pojo.Movie;
 import ir.oveissi.searchmovies.pojo.TmpMovies;
 import ir.oveissi.searchmovies.utils.Constants;
@@ -9,17 +11,9 @@ import rx.Observable;
  * Created by abbas on 7/18/16.
  */
 public class SearchMoviesApiServiceImpl implements SearchMoviesApiService{
-    private static SearchMoviesApiService INSTANCE;
-
-    public static SearchMoviesApiService getInstance(ApiInterface api) {
-        if (INSTANCE == null) {
-            INSTANCE = new SearchMoviesApiServiceImpl(api);
-        }
-        return INSTANCE;
-    }
-
     private final ApiInterface api;
-    private SearchMoviesApiServiceImpl(ApiInterface api) {
+
+    public SearchMoviesApiServiceImpl(ApiInterface api) {
         this.api = api;
     }
 

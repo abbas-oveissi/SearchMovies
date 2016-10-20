@@ -19,6 +19,8 @@ package ir.oveissi.searchmovies.interactors;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import ir.oveissi.searchmovies.interactors.remote.SearchMoviesApiService;
 import ir.oveissi.searchmovies.pojo.Movie;
 import ir.oveissi.searchmovies.pojo.TmpMovies;
@@ -29,19 +31,11 @@ import rx.functions.Func1;
 
 public class MovieInteractorImpl implements MovieInteractor {
 
-    private static MovieInteractor INSTANCE;
-
-    public static MovieInteractor getInstance(SearchMoviesApiService searchMoviesApiService, SchedulerProvider scheduler) {
-        if (INSTANCE == null) {
-            INSTANCE = new MovieInteractorImpl(searchMoviesApiService,scheduler);
-        }
-        return INSTANCE;
-    }
-
     private final SearchMoviesApiService searchMoviesApiService;
     private final SchedulerProvider scheduler;
 
-    private MovieInteractorImpl(SearchMoviesApiService searchMoviesApiService, SchedulerProvider scheduler) {
+    @Inject
+    public MovieInteractorImpl(SearchMoviesApiService searchMoviesApiService, SchedulerProvider scheduler) {
         this.searchMoviesApiService = searchMoviesApiService;
         this.scheduler = scheduler;
     }

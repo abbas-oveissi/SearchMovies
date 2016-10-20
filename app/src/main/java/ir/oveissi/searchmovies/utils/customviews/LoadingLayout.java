@@ -1,4 +1,4 @@
-package ir.oveissi.searchmovies.customviews;
+package ir.oveissi.searchmovies.utils.customviews;
 
 import android.content.Context;
 import android.graphics.PorterDuff;

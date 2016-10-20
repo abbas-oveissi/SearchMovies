@@ -20,6 +20,8 @@ import android.util.Log;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import ir.oveissi.searchmovies.interactors.MovieInteractor;
 import ir.oveissi.searchmovies.pojo.Movie;
 import retrofit2.adapter.rxjava.HttpException;
@@ -34,7 +36,7 @@ public class MovieSearchPresenter implements MovieSearchContract.Presenter {
     private CompositeSubscription mSubscriptions;
     private static final String TAG="MovieSearchPresenter";
 
-    //
+    @Inject
     public MovieSearchPresenter(MovieInteractor mMovieInteractor, MovieSearchContract.View tView) {
         this.mMovieInteractor = mMovieInteractor;
         this.mtView = tView;

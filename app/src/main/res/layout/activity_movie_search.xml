@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:minHeight="?attr/actionBarSize"
         android:layout_height="wrap_content"/>
-    <ir.oveissi.searchmovies.customviews.SearchView
+    <ir.oveissi.searchmovies.utils.customviews.SearchView
         android:id="@+id/svMovies"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
@@ -19,7 +19,7 @@
         android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="1dp"/>
-    <ir.oveissi.searchmovies.customviews.LoadingLayout
+    <ir.oveissi.searchmovies.utils.customviews.LoadingLayout
         android:id="@+id/loadinglayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -27,6 +27,6 @@
             android:id="@+id/rvMovies"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-    </ir.oveissi.searchmovies.customviews.LoadingLayout>
+    </ir.oveissi.searchmovies.utils.customviews.LoadingLayout>
 
 </LinearLayout>

@@ -37,4 +37,7 @@ dependencies {
 
     compile rootProject.ext.libraries.picasso
 
+
+    compile rootProject.ext.libraries.dagger
+    provided rootProject.ext.aptLibraries.daggerCompiler
 }

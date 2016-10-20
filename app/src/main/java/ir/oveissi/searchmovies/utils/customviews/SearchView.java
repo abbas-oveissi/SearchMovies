@@ -1,4 +1,4 @@
-package ir.oveissi.searchmovies.customviews;
+package ir.oveissi.searchmovies.utils.customviews;
 
 import android.app.Activity;
 import android.content.Context;

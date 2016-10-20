@@ -18,6 +18,8 @@ package ir.oveissi.searchmovies.features.moviedetail;
 
 import android.util.Log;
 
+import javax.inject.Inject;
+
 import ir.oveissi.searchmovies.interactors.MovieInteractor;
 import ir.oveissi.searchmovies.pojo.Movie;
 import retrofit2.adapter.rxjava.HttpException;
@@ -30,8 +32,9 @@ public class MovieDetailPresenter implements MovieDetailContract.Presenter {
     private final MovieInteractor mMovieInteractor;
     private final MovieDetailContract.View mtView;
     private CompositeSubscription mSubscriptions;
-    private static final String TAG="MovieSearchPresenter";
+    private static final String TAG="MovieDetailPresenter";
 
+    @Inject
     public MovieDetailPresenter(MovieInteractor mMovieInteractor, MovieDetailContract.View tView) {
         this.mMovieInteractor = mMovieInteractor;
         this.mtView = tView;

@@ -9,19 +9,19 @@ import android.widget.TextView;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import javax.inject.Inject;
+
 import ir.oveissi.searchmovies.R;
-import ir.oveissi.searchmovies.interactors.MovieInteractor;
-import ir.oveissi.searchmovies.interactors.MovieInteractorImpl;
-import ir.oveissi.searchmovies.interactors.remote.ApiClient;
-import ir.oveissi.searchmovies.interactors.remote.SearchMoviesApiServiceImpl;
+import ir.oveissi.searchmovies.SearchMovieApplication;
 import ir.oveissi.searchmovies.pojo.Movie;
 import ir.oveissi.searchmovies.utils.Constants;
-import ir.oveissi.searchmovies.utils.SchedulerProviderImpl;
 
 public class MovieDetailActivity extends AppCompatActivity implements MovieDetailContract.View {
 
-    private MovieDetailPresenter mPresenter;
-    public String title="";
+    @Inject
+    public MovieDetailContract.Presenter mPresenter;
+
+
     TextView tvMovieTitle,tvOverview;
     private String movie_id;
     private String image_path;
@@ -29,6 +29,8 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SearchMovieApplication.getComponent().plus(new MovieDetailPresenterModule(this)).inject(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.myToolbar);
@@ -37,12 +39,6 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
         tvMovieTitle=(TextView) findViewById(R.id.tvMovieTitle);
         tvOverview=(TextView)findViewById(R.id.tvOverview);
         imageView=(ImageView)findViewById(R.id.imPoster);
-
-        MovieInteractor mvInteractor = MovieInteractorImpl.getInstance(
-                SearchMoviesApiServiceImpl.getInstance(ApiClient.getClient()),
-                new SchedulerProviderImpl());
-
-        mPresenter = new MovieDetailPresenter(mvInteractor,this);
 
 
         if(getIntent().getExtras()!=null)
@@ -58,8 +54,6 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
                 .placeholder(R.drawable.placeholder)
                 .networkPolicy(NetworkPolicy.OFFLINE)
                 .into(imageView);
-
-
     }
 
     @Override
