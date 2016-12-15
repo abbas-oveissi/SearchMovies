@@ -68,6 +68,9 @@ dependencies {
 
     compile rootProject.ext.libraries.dagger
     provided rootProject.ext.libraries.daggerCompiler
+
+    compile rootProject.ext.libraries.materialProgress
+
 }
 
 android.applicationVariants.all { variant ->

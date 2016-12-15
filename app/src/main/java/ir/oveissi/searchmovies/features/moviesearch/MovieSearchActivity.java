@@ -44,6 +44,12 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
         mSearchView=(SearchView)findViewById(R.id.svMovies);
         loadinglayout=(LoadingLayout)findViewById(R.id.loadinglayout);
         loadinglayout.setState(LoadingLayout.STATE_SHOW_DATA);
+        loadinglayout.setListener(new LoadingLayout.onErrorClickListener() {
+            @Override
+            public void onClick() {
+                mPresenter.performSearch(title);
+            }
+        });
 
         rv.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
         mListAdapter=new MovieSearchAdapter(MovieSearchActivity.this, new ArrayList<Movie>());

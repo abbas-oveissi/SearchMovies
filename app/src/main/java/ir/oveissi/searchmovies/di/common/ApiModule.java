@@ -10,7 +10,6 @@ import ir.oveissi.searchmovies.interactors.remote.ApiInterface;
 import ir.oveissi.searchmovies.interactors.remote.SearchMoviesApiService;
 import ir.oveissi.searchmovies.interactors.remote.SearchMoviesApiServiceImpl;
 import okhttp3.OkHttpClient;
-import retrofit2.BaseUrl;
 import retrofit2.CallAdapter;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
@@ -29,7 +28,7 @@ public class ApiModule {
 
     @Provides
     @Singleton
-    public Retrofit provideRetrofit(BaseUrl baseUrl, Converter.Factory converterFactory, CallAdapter.Factory callAdapterFactory, OkHttpClient okHttpClient) {
+    public Retrofit provideRetrofit(@Named("BaseUrl") String baseUrl, Converter.Factory converterFactory, CallAdapter.Factory callAdapterFactory, OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(converterFactory)

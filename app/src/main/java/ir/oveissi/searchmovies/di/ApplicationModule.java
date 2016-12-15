@@ -9,8 +9,6 @@ import ir.oveissi.searchmovies.BuildConfig;
 import ir.oveissi.searchmovies.utils.Constants;
 import ir.oveissi.searchmovies.utils.SchedulerProvider;
 import ir.oveissi.searchmovies.utils.SchedulerProviderImpl;
-import okhttp3.HttpUrl;
-import retrofit2.BaseUrl;
 
 /**
  * Created by abbas on 6/25/16.
@@ -31,16 +29,15 @@ public final class ApplicationModule {
         return 30;
     }
 
+
+
     @Provides
     @Singleton
-    public BaseUrl provideBaseUrl() {
-        return new BaseUrl() {
-            @Override
-            public HttpUrl url() {
-               return HttpUrl.parse(Constants.BASE_URL);
-            }
-        };
+    @Named("BaseUrl")
+    public String provideBaseUrl() {
+        return Constants.BASE_URL;
     }
+
 
     @Provides
     @Singleton
