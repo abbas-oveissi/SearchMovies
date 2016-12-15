@@ -17,3 +17,6 @@ android:
     - extra-android-support
   licenses:
     - '.+'
+
+before_install:
+  - chmod +x gradlew
