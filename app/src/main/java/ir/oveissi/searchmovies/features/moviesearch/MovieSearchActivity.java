@@ -15,7 +15,7 @@ import javax.inject.Inject;
 import ir.oveissi.searchmovies.R;
 import ir.oveissi.searchmovies.SearchMovieApplication;
 import ir.oveissi.searchmovies.pojo.Movie;
-import ir.oveissi.searchmovies.utils.EndlessRecyclerOnScrollListener;
+import ir.oveissi.searchmovies.utils.AdvancedEndlessRecyclerOnScrollListener;
 import ir.oveissi.searchmovies.utils.customviews.LoadingLayout;
 import ir.oveissi.searchmovies.utils.customviews.SearchView;
 
@@ -30,7 +30,7 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
     LoadingLayout loadinglayout;
     public String title="";
 
-
+    public int current_page=1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SearchMovieApplication.getComponent().plus(new MovieSearchPresenterModule(this)).inject(this);
@@ -58,9 +58,9 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
             }
         });
 
-        rv.addOnScrollListener(new EndlessRecyclerOnScrollListener((LinearLayoutManager) rv.getLayoutManager()) {
+        rv.addOnScrollListener(new AdvancedEndlessRecyclerOnScrollListener((LinearLayoutManager) rv.getLayoutManager()) {
             @Override
-            public void onLoadMore(int current_page) {
+            public void onLoadMore() {
                 mPresenter.getMoviesByTitle(title,current_page);
             }
         });
