@@ -10,18 +10,6 @@ android {
     def versionPatch = 0
 
 
-    signingConfigs {
-        config {
-            storeFile file("${keystore_path}")
-            def props = new Properties()
-            props.load(new FileInputStream("${keystore_config_path}"))
-            storePassword props.keyStorePassword
-            keyAlias props.keyAlias
-            keyPassword props.keyAliasPassword
-        }
-    }
-
-
     defaultConfig {
         applicationId "ir.oveissi.MovieSearcher"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -30,14 +18,9 @@ android {
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
     }
     buildTypes {
-        debug {
-            signingConfig signingConfigs.config
-        }
         release {
-            minifyEnabled true
-            zipAlignEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.config
         }
     }
 }
