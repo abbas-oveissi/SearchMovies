@@ -2,16 +2,15 @@ package ir.oveissi.searchmovies.features.moviesearch;
 
 import java.util.List;
 
-import ir.oveissi.searchmovies.utils.BasePresenter;
-import ir.oveissi.searchmovies.utils.BaseView;
 import ir.oveissi.searchmovies.pojo.Movie;
+import ir.oveissi.searchmovies.utils.bases.IView;
 
 /**
  * Created by Abbas on 24/05/2016.
  */
 public interface MovieSearchContract {
 
-    interface View extends BaseView<Presenter> {
+    interface View extends IView<Presenter> {
 
         void showMoreMovies(List<Movie> tasks);
 
@@ -25,7 +24,7 @@ public interface MovieSearchContract {
 
     }
 
-    interface Presenter extends BasePresenter {
+    interface Presenter {
 
         void getMoviesByTitle(String title,int page);
 

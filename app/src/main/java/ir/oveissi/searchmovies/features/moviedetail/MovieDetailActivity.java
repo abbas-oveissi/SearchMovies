@@ -29,7 +29,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SearchMovieApplication.getComponent().plus(new MovieDetailPresenterModule(this)).inject(this);
+        SearchMovieApplication.getComponent().plus(new MovieDetailPresenterModule()).inject(this);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
@@ -54,20 +54,15 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
                 .placeholder(R.drawable.placeholder)
                 .networkPolicy(NetworkPolicy.OFFLINE)
                 .into(imageView);
+
+        mPresenter.attachView(this);
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        mPresenter.subscribe();
+    protected void onDestroy() {
+        this.mPresenter.detachView();
+        super.onDestroy();
     }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mPresenter.unsubscribe();
-    }
-
     @Override
     public void showMovieDetail(Movie movie) {
         tvMovieTitle.setText(movie.original_title);

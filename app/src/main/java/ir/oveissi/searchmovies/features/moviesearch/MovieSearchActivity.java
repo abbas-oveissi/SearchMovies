@@ -33,7 +33,7 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
     public int current_page=1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SearchMovieApplication.getComponent().plus(new MovieSearchPresenterModule(this)).inject(this);
+        SearchMovieApplication.getComponent().plus(new MovieSearchPresenterModule()).inject(this);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_search);
@@ -71,6 +71,7 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
             }
         });
 
+        mPresenter.attachView(this);
     }
 
 
@@ -106,16 +107,11 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        mPresenter.subscribe();
-    }
+
 
     @Override
-    public void onPause() {
-        super.onPause();
-        mPresenter.unsubscribe();
+    protected void onDestroy() {
+        this.mPresenter.detachView();
+        super.onDestroy();
     }
-
 }

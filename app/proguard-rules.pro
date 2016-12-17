@@ -15,3 +15,82 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+
+
+-keepattributes SourceFile,LineNumberTable
+-keepattributes *Annotation*
+
+
+
+
+##---------------Begin: proguard configuration for Gson  ----------
+-keepattributes Signature
+
+# For using GSON @Expose annotation
+-keepattributes *Annotation*
+
+# Gson specific classes
+-keep class sun.misc.Unsafe { *; }
+#-keep class com.google.gson.stream.** { *; }
+
+
+
+# Application classes that will be serialized/deserialized over Gson
+-keep class ir.oveissi.searchmovies.pojo.** { *; }
+
+##---------------End: proguard configuration for Gson  ---------
+
+
+
+
+# Retrofit 2.X
+## https://square.github.io/retrofit/ ##
+-dontwarn retrofit2.**
+-keep class retrofit2.** { *; }
+-keepattributes Signature
+-keepattributes Exceptions
+
+-keepclasseswithmembers class * {
+    @retrofit2.http.* <methods>;
+}
+
+#jsoup
+-keeppackagenames org.jsoup.nodes
+
+
+#proguard-support-v7-appcompat.pro
+-keep public class android.support.v7.widget.** { *; }
+-keep public class android.support.v7.internal.widget.** { *; }
+-keep public class android.support.v7.internal.view.menu.** { *; }
+
+-keep public class * extends android.support.v4.view.ActionProvider {
+    public <init>(android.content.Context);
+}
+
+# http://stackoverflow.com/questions/29679177/cardview-shadow-not-appearing-in-lollipop-after-obfuscate-with-proguard/29698051
+-keep class android.support.v7.widget.RoundRectDrawable { *; }
+
+
+## Square Picasso specific rules ##
+## https://square.github.io/picasso/ ##
+
+-dontwarn com.squareup.okhttp.**
+
+# Okio
+-keep class sun.misc.Unsafe { *; }
+-dontwarn java.nio.file.*
+-dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+-dontwarn okio.**
+
+# OkHttp
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class okhttp3.** { *; }
+-keep interface okhttp3.** { *; }
+-dontwarn okhttp3.**
+
+
+-dontwarn dagger.**
+
+-dontwarn rx.internal.util.unsafe.*

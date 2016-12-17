@@ -16,6 +16,6 @@
 
 package ir.oveissi.searchmovies.utils.bases;
 
-public interface BaseView<T> {
+public interface IView<T> {
 
 }

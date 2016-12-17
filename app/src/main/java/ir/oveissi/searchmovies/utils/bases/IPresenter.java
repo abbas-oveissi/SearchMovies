@@ -16,10 +16,9 @@
 
 package ir.oveissi.searchmovies.utils.bases;
 
-public interface BasePresenter {
-
-    void subscribe();
-
-    void unsubscribe();
-
+public interface IPresenter<T> {
+    void attachView(T view);
+    void detachView();
+    boolean doIfView();
+    void checkCompositeSubscription();
 }

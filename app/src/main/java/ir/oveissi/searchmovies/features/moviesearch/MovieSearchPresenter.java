@@ -18,6 +18,7 @@ package ir.oveissi.searchmovies.features.moviesearch;
 
 import android.util.Log;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -31,65 +32,88 @@ import rx.subscriptions.CompositeSubscription;
 
 public class MovieSearchPresenter implements MovieSearchContract.Presenter {
 
+
+    private WeakReference<MovieSearchContract.View> mainView;
+    private CompositeSubscription compositeSubscription;
     private final MovieInteractor mMovieInteractor;
-    private final MovieSearchContract.View mtView;
-    private CompositeSubscription mSubscriptions;
     private static final String TAG="MovieSearchPresenter";
 
     @Inject
-    public MovieSearchPresenter(MovieInteractor mMovieInteractor, MovieSearchContract.View tView) {
+    public MovieSearchPresenter(MovieInteractor mMovieInteractor) {
+        this.compositeSubscription = new CompositeSubscription();
         this.mMovieInteractor = mMovieInteractor;
-        this.mtView = tView;
-        mSubscriptions = new CompositeSubscription();
-    }
-
-    @Override
-    public void subscribe() {
-    }
-
-    @Override
-    public void unsubscribe() {
-        mSubscriptions.clear();
     }
 
     @Override
     public void getMoviesByTitle(String title,int page) {
+        checkCompositeSubscription();
         Subscription mSubscription=
                 mMovieInteractor.getMoviesByTitle(title,page)
-                .subscribe(new Observer<List<Movie>>() {
-                    @Override
-                    public void onCompleted() {
-                        Log.d(TAG, "onCompleted: ");
-                    }
+                        .subscribe(new Observer<List<Movie>>() {
+                            @Override
+                            public void onCompleted() {
+                                Log.d(TAG, "onCompleted: ");
+                            }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        if (e instanceof HttpException) {
-                            Log.d(TAG, "onError StatusCode: "+((HttpException) e).code());
-                        }
-                        Log.d(TAG, "onError");
-                        mtView.showToast("خطا رخ داد.");
-                    }
+                            @Override
+                            public void onError(Throwable e) {
+                                if (e instanceof HttpException) {
+                                    Log.d(TAG, "onError StatusCode: "+((HttpException) e).code());
+                                }
+                                Log.d(TAG, "onError");
+                                if(doIfView())
+                                    mainView.get().showToast("خطا رخ داد.");
+                            }
 
-                    @Override
-                    public void onNext(List<Movie> movies) {
-                        Log.d(TAG, "onNext");
-                        mtView.hideLoadingForMovies();
-                        mtView.showMoreMovies(movies);
-                    }
-                });
-        mSubscriptions.add(mSubscription);
+                            @Override
+                            public void onNext(List<Movie> movies) {
+                                Log.d(TAG, "onNext");
+                                if(doIfView()) {
+                                    mainView.get().hideLoadingForMovies();
+                                    mainView.get().showMoreMovies(movies);
+                                }
+                            }
+                        });
+        compositeSubscription.add(mSubscription);
     }
 
     @Override
     public void performSearch(String terms) {
         if(terms.length()<=2)
         {
-            mtView.showToast("لطفا بیشتر از 2 کاراکتر وارد کنید.");
-            return;
+            if(doIfView()) {
+                mainView.get().showToast("لطفا بیشتر از 2 کاراکتر وارد کنید.");
+            }
         }
-        mtView.showLoadingForMovies();
-        mtView.clearMovies();
+
+        if(doIfView()) {
+            mainView.get().showLoadingForMovies();
+            mainView.get().clearMovies();
+        }
         getMoviesByTitle(terms,1);
+
     }
+
+
+
+    public void attachView(MovieSearchContract.View view) {
+        this.mainView = new WeakReference<>(view);
+    }
+
+    public void detachView() {
+        this.mainView.clear();
+        if (!this.compositeSubscription.isUnsubscribed())
+            this.compositeSubscription.unsubscribe();
+    }
+
+    public boolean doIfView() {
+        return this.mainView != null && this.mainView.get() != null;
+    }
+
+    public void checkCompositeSubscription() {
+        if (this.compositeSubscription == null || this.compositeSubscription.isUnsubscribed())
+            this.compositeSubscription = new CompositeSubscription();
+    }
+
+
 }

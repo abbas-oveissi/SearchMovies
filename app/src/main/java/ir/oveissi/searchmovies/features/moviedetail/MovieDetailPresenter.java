@@ -18,6 +18,8 @@ package ir.oveissi.searchmovies.features.moviedetail;
 
 import android.util.Log;
 
+import java.lang.ref.WeakReference;
+
 import javax.inject.Inject;
 
 import ir.oveissi.searchmovies.interactors.MovieInteractor;
@@ -27,56 +29,67 @@ import rx.Observer;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
-public class MovieDetailPresenter implements MovieDetailContract.Presenter {
+public class MovieDetailPresenter  implements MovieDetailContract.Presenter {
 
+    private WeakReference<MovieDetailContract.View> mainView;
+    private CompositeSubscription compositeSubscription;
     private final MovieInteractor mMovieInteractor;
-    private final MovieDetailContract.View mtView;
-    private CompositeSubscription mSubscriptions;
     private static final String TAG="MovieDetailPresenter";
 
     @Inject
-    public MovieDetailPresenter(MovieInteractor mMovieInteractor, MovieDetailContract.View tView) {
+    public MovieDetailPresenter(MovieInteractor mMovieInteractor) {
+        this.compositeSubscription = new CompositeSubscription();
         this.mMovieInteractor = mMovieInteractor;
-        this.mtView = tView;
-        mSubscriptions = new CompositeSubscription();
-    }
-
-    @Override
-    public void subscribe() {
-    }
-
-    @Override
-    public void unsubscribe() {
-        mSubscriptions.clear();
     }
 
     @Override
     public void getMovieDetailFromWebservice(String id) {
-                Subscription mSubscription=
+        checkCompositeSubscription();
+        Subscription mSubscription=
                 mMovieInteractor.getMovieByID(id)
-                .subscribe(new Observer<Movie>() {
-                    @Override
-                    public void onCompleted() {
-                        Log.d(TAG, "onCompleted: ");
-                    }
+                        .subscribe(new Observer<Movie>() {
+                            @Override
+                            public void onCompleted() {
+                                Log.d(TAG, "onCompleted: ");
+                            }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        if (e instanceof HttpException) {
-                            Log.d(TAG, "onError StatusCode: "+((HttpException) e).code());
-                        }
-                        Log.d(TAG, "onError");
-                    }
+                            @Override
+                            public void onError(Throwable e) {
+                                if (e instanceof HttpException) {
+                                    Log.d(TAG, "onError StatusCode: "+((HttpException) e).code());
+                                }
+                                Log.d(TAG, "onError");
+                            }
 
-                    @Override
-                    public void onNext(Movie movie) {
-                        Log.d(TAG, "onNext");
-                        mtView.showMovieDetail(movie);
-                    }
-                });
-        mSubscriptions.add(mSubscription);
+                            @Override
+                            public void onNext(Movie movie) {
+                                Log.d(TAG, "onNext");
+                                if(doIfView()) {
+                                    mainView.get().showMovieDetail(movie);
+                                    mainView.get().showMovieDetail(movie);
+                                }
+                            }
+                        });
+        compositeSubscription.add(mSubscription);
     }
 
 
+    public void attachView(MovieDetailContract.View view) {
+        this.mainView = new WeakReference<>(view);
+    }
 
+    public void detachView() {
+        this.mainView.clear();
+        if (!this.compositeSubscription.isUnsubscribed())
+            this.compositeSubscription.unsubscribe();
+    }
+
+    public boolean doIfView() {
+        return this.mainView != null && this.mainView.get() != null;
+    }
+
+    public void checkCompositeSubscription() {
+        if (this.compositeSubscription == null || this.compositeSubscription.isUnsubscribed())
+            this.compositeSubscription = new CompositeSubscription();
+    }
 }
