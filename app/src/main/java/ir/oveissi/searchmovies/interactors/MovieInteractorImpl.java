@@ -46,7 +46,7 @@ public class MovieInteractorImpl implements MovieInteractor {
                 .map(new Func1<TmpMovies, List<Movie>>() {
                     @Override
                     public List<Movie> call(TmpMovies tmpMovies) {
-                        return tmpMovies.results;
+                        return tmpMovies.data;
                     }
                 })
                 .subscribeOn(scheduler.backgroundThread())

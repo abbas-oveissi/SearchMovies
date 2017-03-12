@@ -12,11 +12,11 @@ import rx.Observable;
  */
 public interface ApiInterface {
 
-        //http://api.themoviedb.org/3/search/movie?api_key=[API_KEY]&query=[QUERY]
-        @GET("search/movie")
-        Observable<TmpMovies> getMoviesByTitle(@Query("api_key") String apiKey, @Query("query") String query, @Query("page") Integer page);
+        //http://moviesapi.ir/api/v1/movies?q=[QUERY]
+        @GET("movies")
+        Observable<TmpMovies> getMoviesByTitle(@Query("q") String query, @Query("page") Integer page);
 
-        //http://api.themoviedb.org/3/movie/[ID]/movie?api_key=[API_KEY]
-        @GET("movie/{id}")
-        Observable<Movie> getMovieById(@Path("id") String id,@Query("api_key") String apiKey);
+        //http://moviesapi.ir/api/v1/movies/{ID}
+        @GET("movies/{id}")
+        Observable<Movie> getMovieById(@Path("id") String id);
 }

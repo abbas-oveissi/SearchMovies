@@ -19,11 +19,11 @@ public class SearchMoviesApiServiceImpl implements SearchMoviesApiService{
 
     @Override
     public Observable<TmpMovies> getMoviesByTitle(String query,Integer page) {
-        return api.getMoviesByTitle(Constants.API_KEY,query,page);
+        return api.getMoviesByTitle(query,page);
     }
 
     @Override
     public Observable<Movie> getMovieById(String id) {
-        return api.getMovieById(id,Constants.API_KEY);
+        return api.getMovieById(id);
     }
 }

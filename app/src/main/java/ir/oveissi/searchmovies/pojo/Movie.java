@@ -1,22 +1,28 @@
 package ir.oveissi.searchmovies.pojo;
 
-import java.util.List;
-
 /**
  * Created by Abbas on 25/05/2016.
  */
 public class Movie {
-    public List<Integer> genre_ids;
     public Integer id;
-    public Double popularity;
-    public Double vote_average;
-    public Integer vote_count;
-    public String backdrop_path;
-    public String original_language;
-    public String original_title;
-    public String overview;
-    public String release_date;
-    public String poster_path;
-    public boolean adult;
-    public boolean video;
+    public String title;
+    public String poster;
+    public String year;
+    public String country;
+    public String imdb_rating;
+    public String[] genres;
+    public String[] images;
+    public String rated;
+    public String released;
+    public String runtime;
+    public String director;
+    public String writer;
+    public String actors;
+    public String plot;
+    public String awards;
+    public String metascore;
+    public String imdb_votes;
+    public String imdb_id;
+    public String type;
+
 }

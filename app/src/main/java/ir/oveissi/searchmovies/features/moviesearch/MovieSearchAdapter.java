@@ -19,7 +19,6 @@ import java.util.List;
 import ir.oveissi.searchmovies.R;
 import ir.oveissi.searchmovies.features.moviedetail.MovieDetailActivity;
 import ir.oveissi.searchmovies.pojo.Movie;
-import ir.oveissi.searchmovies.utils.Constants;
 
 public class MovieSearchAdapter extends RecyclerView.Adapter<MovieSearchAdapter.ViewHolder> {
     private Context mContext;
@@ -54,10 +53,10 @@ public class MovieSearchAdapter extends RecyclerView.Adapter<MovieSearchAdapter.
         Movie tempItem=itemsData.get(position);
 
         viewHolder.item=tempItem;
-        viewHolder.tvMovieTitle.setText(tempItem.original_title);
-        viewHolder.tvMovieType.setText(tempItem.overview);
+        viewHolder.tvMovieTitle.setText(tempItem.title);
+        viewHolder.tvMovieType.setText(tempItem.country);
         Picasso.with(mContext)
-                .load(Constants.BASE_IMAGE_URL+tempItem.poster_path)
+                .load(tempItem.poster)
                 .placeholder(R.drawable.placeholder)
                 .into(viewHolder.imPoster);
     }
@@ -80,7 +79,7 @@ public class MovieSearchAdapter extends RecyclerView.Adapter<MovieSearchAdapter.
                 public void onClick(View v) {
                     Intent i=new Intent(v.getContext(),MovieDetailActivity.class);
                     i.putExtra("movie_id",String.valueOf(item.id));
-                    i.putExtra("image_path",item.poster_path);
+                    i.putExtra("image_path",item.poster);
                     if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP)
                     {
                         ActivityOptionsCompat option =

@@ -72,6 +72,7 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
         });
 
         mPresenter.attachView(this);
+        mPresenter.getMoviesByTitle(title,1);
     }
 
 

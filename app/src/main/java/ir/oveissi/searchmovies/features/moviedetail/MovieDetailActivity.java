@@ -14,7 +14,6 @@ import javax.inject.Inject;
 import ir.oveissi.searchmovies.R;
 import ir.oveissi.searchmovies.SearchMovieApplication;
 import ir.oveissi.searchmovies.pojo.Movie;
-import ir.oveissi.searchmovies.utils.Constants;
 
 public class MovieDetailActivity extends AppCompatActivity implements MovieDetailContract.View {
 
@@ -49,7 +48,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
         }
 
         Picasso.with(this)
-                .load(Constants.BASE_IMAGE_URL+image_path)
+                .load(image_path)
                 .noFade()
                 .placeholder(R.drawable.placeholder)
                 .networkPolicy(NetworkPolicy.OFFLINE)
@@ -65,8 +64,8 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     }
     @Override
     public void showMovieDetail(Movie movie) {
-        tvMovieTitle.setText(movie.original_title);
-        tvOverview.setText(movie.overview);
+        tvMovieTitle.setText(movie.title);
+        tvOverview.setText(movie.plot);
     }
 
 }
