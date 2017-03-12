@@ -29,7 +29,7 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
     SearchView mSearchView;
     LoadingLayout loadinglayout;
     public String title="";
-
+    AdvancedEndlessRecyclerOnScrollListener advancedEndlessRecyclerOnScrollListener;
     public int current_page=1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,15 +64,18 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
             }
         });
 
-        rv.addOnScrollListener(new AdvancedEndlessRecyclerOnScrollListener((LinearLayoutManager) rv.getLayoutManager()) {
+        advancedEndlessRecyclerOnScrollListener=new AdvancedEndlessRecyclerOnScrollListener((LinearLayoutManager) rv.getLayoutManager()) {
             @Override
             public void onLoadMore() {
                 mPresenter.getMoviesByTitle(title,current_page);
+                current_page++;
             }
-        });
+        };
+        rv.addOnScrollListener(advancedEndlessRecyclerOnScrollListener);
 
         mPresenter.attachView(this);
         mPresenter.getMoviesByTitle(title,1);
+        current_page++;
     }
 
 
@@ -102,6 +105,7 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
 
     @Override
     public void showMoreMovies(List<Movie> movies) {
+        advancedEndlessRecyclerOnScrollListener.setLoading(false);
         for(Movie p:movies)
         {
             mListAdapter.addItem(p);
