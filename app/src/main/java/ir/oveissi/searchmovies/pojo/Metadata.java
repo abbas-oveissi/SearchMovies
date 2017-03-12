@@ -5,7 +5,6 @@ package ir.oveissi.searchmovies.pojo;
  */
 
 public class Metadata {
-    public Integer page;
     public Integer current_page;
     public Integer per_page;
     public Integer page_count;
