@@ -26,8 +26,7 @@ script:
 - android-wait-for-emulator
 - adb shell input keyevent 82 &
 after_success:
-- echo "a"
-- ls
+- ls app/build/outputs/apk/
 deploy:
   provider: releases
   api_key:
