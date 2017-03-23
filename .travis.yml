@@ -17,7 +17,7 @@ android:
 before_install:
 - chmod +x gradlew
 script:
-- ls app/
+- ./gradlew build check
 - android list targets
 - echo no | android create avd --force -n testemulator -t "android-21" --abi armeabi-v7a
 - echo 'vm.heapSize=512' >> ~/.android/avd/testemulator.ini
@@ -26,7 +26,8 @@ script:
 - emulator -avd testemulator -no-skin -no-audio -no-window &
 - android-wait-for-emulator
 - adb shell input keyevent 82 &
-
+after_script:
+- ls app/
 deploy:
   provider: releases
   api_key:
