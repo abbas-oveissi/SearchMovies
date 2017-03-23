@@ -32,6 +32,7 @@ deploy:
     tags: true
     all_branches: true
     repo: abbas-oveissi/SearchMovies
+
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
