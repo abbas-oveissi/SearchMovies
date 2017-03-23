@@ -33,5 +33,6 @@ deploy:
   file_glob: "true"
   skip_cleanup: true
   on:
-    branch: master
+    tags: true
+    all_branches: true
     repo: abbas-oveissi/SearchMovies
