@@ -16,8 +16,8 @@
 #   public *;
 #}
 
--dontobfuscate
--optimizations !code/simplification/arithmetic,!field/*,!class/merging/*,!code/allocation/variable
+#-dontobfuscate
+#-optimizations !code/simplification/arithmetic,!field/*,!class/merging/*,!code/allocation/variable
 
 
 -keepattributes SourceFile,LineNumberTable
@@ -44,10 +44,24 @@
 ##---------------End: proguard configuration for Gson  ---------
 
 
+##---------------Begin: proguard configuration for RxJava  ----------
+-keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
+    long producerIndex;
+    long consumerIndex;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
+    rx.internal.util.atomic.LinkedQueueNode producerNode;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
+    rx.internal.util.atomic.LinkedQueueNode consumerNode;
+}
+
+-dontwarn rx.internal.util.unsafe.*
+
+##---------------End: proguard configuration for RxJava  ---------
 
 
-# Retrofit 2.X
-## https://square.github.io/retrofit/ ##
+##---------------Begin: proguard configuration for Retrofit 2.X  ----------
 -dontwarn retrofit2.**
 -keep class retrofit2.** { *; }
 -keepattributes Signature
@@ -56,6 +70,7 @@
 -keepclasseswithmembers class * {
     @retrofit2.http.* <methods>;
 }
+##---------------End: proguard configuration for Retrofit 2.X  ---------
 
 #jsoup
 -keeppackagenames org.jsoup.nodes
@@ -77,7 +92,6 @@
 ## Square Picasso specific rules ##
 ## https://square.github.io/picasso/ ##
 
--dontwarn com.squareup.okhttp.**
 
 # Okio
 -keep class sun.misc.Unsafe { *; }
@@ -91,8 +105,10 @@
 -keep class okhttp3.** { *; }
 -keep interface okhttp3.** { *; }
 -dontwarn okhttp3.**
+-dontwarn com.squareup.okhttp.**
 
 
 -dontwarn dagger.**
 
--dontwarn rx.internal.util.unsafe.*
+
+
