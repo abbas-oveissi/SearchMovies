@@ -1,10 +1,6 @@
 package ir.oveissi.searchmovies.features.moviesearch;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.os.Build;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +13,6 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import ir.oveissi.searchmovies.R;
-import ir.oveissi.searchmovies.features.moviedetail.MovieDetailActivity;
 import ir.oveissi.searchmovies.pojo.Movie;
 
 public class MovieSearchAdapter extends RecyclerView.Adapter<MovieSearchAdapter.ViewHolder> {
@@ -28,6 +23,15 @@ public class MovieSearchAdapter extends RecyclerView.Adapter<MovieSearchAdapter.
         this.mContext = mContext;
         this.itemsData = itemsData;
     }
+
+    public void setItemClickListener(ItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+    }
+    ItemClickListener itemClickListener;
+    public interface ItemClickListener {
+        void ItemClicked(int position, Movie item,ImageView imPoster);
+    }
+
 
     public void clear()
     {
@@ -44,57 +48,50 @@ public class MovieSearchAdapter extends RecyclerView.Adapter<MovieSearchAdapter.
     public MovieSearchAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemLayoutView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.row_movie,  parent, false);
-        ViewHolder viewHolder = new ViewHolder(itemLayoutView,mContext);
+        ViewHolder viewHolder = new ViewHolder(itemLayoutView,mContext,this);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         Movie tempItem=itemsData.get(position);
-
-        viewHolder.item=tempItem;
-        viewHolder.tvMovieTitle.setText(tempItem.title);
-        viewHolder.tvMovieType.setText(tempItem.country);
-        Picasso.with(mContext)
-                .load(tempItem.poster)
-                .placeholder(R.drawable.placeholder)
-                .into(viewHolder.imPoster);
+        viewHolder.bind(tempItem);
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public Movie item;
         public Context mcontext;
         public TextView tvMovieTitle;
-        public TextView tvMovieType;
+        private final MovieSearchAdapter movieSearchAdapter;
         public ImageView imPoster;
-        public ViewHolder(View itemLayoutView,Context context) {
+        public ViewHolder(View itemLayoutView,Context context,MovieSearchAdapter movieSearchAdapter) {
             super(itemLayoutView);
             this.mcontext = context;
             tvMovieTitle = (TextView) itemLayoutView.findViewById(R.id.tvMovieTitle);
-            tvMovieType = (TextView) itemLayoutView.findViewById(R.id.tvMovieType);
+            this.movieSearchAdapter = movieSearchAdapter;
             imPoster = (ImageView) itemLayoutView.findViewById(R.id.imPoster);
+            itemLayoutView.setOnClickListener(this);
 
-            itemLayoutView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i=new Intent(v.getContext(),MovieDetailActivity.class);
-                    i.putExtra("movie_id",String.valueOf(item.id));
-                    i.putExtra("image_path",item.poster);
-                    if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP)
-                    {
-                        ActivityOptionsCompat option =
-                                ActivityOptionsCompat.makeSceneTransitionAnimation(
-                                        (Activity)mcontext,imPoster,"imPoster");
-                        ((Activity)mcontext).startActivity(i,option.toBundle());
+        }
+
+        void bind(Movie item)
+        {
+            tvMovieTitle.setText(item.title);
+            Picasso.with(mcontext)
+                    .load(item.poster)
+                    .placeholder(R.drawable.placeholder)
+                    .into(imPoster);
+        }
 
 
-                    }
-                    else
-                    {
-                        v.getContext().startActivity(i);
-                    }
-                }
-            });
+        @Override
+        public void onClick(View v) {
+            if(movieSearchAdapter.itemClickListener!=null)
+            {
+                movieSearchAdapter.itemClickListener.ItemClicked(getAdapterPosition(),
+                        movieSearchAdapter.itemsData.get(getAdapterPosition()),imPoster);
+            }
+
         }
     }
 
