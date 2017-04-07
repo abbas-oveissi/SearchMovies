@@ -80,8 +80,7 @@ public class MovieDetailPresenter  implements MovieDetailContract.Presenter {
 
     public void detachView() {
         this.mainView.clear();
-        if (!this.compositeSubscription.isUnsubscribed())
-            this.compositeSubscription.unsubscribe();
+        this.compositeSubscription.clear();
     }
 
     public boolean doIfView() {
