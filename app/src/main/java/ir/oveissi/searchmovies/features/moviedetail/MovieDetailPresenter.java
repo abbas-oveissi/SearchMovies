@@ -21,6 +21,7 @@ import android.util.Log;
 import javax.inject.Inject;
 
 import ir.oveissi.searchmovies.interactors.MovieInteractor;
+import ir.oveissi.searchmovies.interactors.remote.GeneralApiException;
 import ir.oveissi.searchmovies.pojo.Movie;
 import retrofit2.adapter.rxjava.HttpException;
 import rx.Observer;
@@ -55,7 +56,15 @@ public class MovieDetailPresenter  implements MovieDetailContract.Presenter {
                                 if (e instanceof HttpException) {
                                     Log.d(TAG, "onError StatusCode: "+((HttpException) e).code());
                                 }
-                                Log.d(TAG, "onError");
+                                else if(e instanceof GeneralApiException)
+                                {
+                                    Log.d(TAG, "onError message: "+((GeneralApiException) e).message);
+                                }
+                                else
+                                {
+                                    Log.d(TAG, "onError");
+                                }
+                                viewLayer.showToast("خطا رخ داد.");
                             }
 
                             @Override

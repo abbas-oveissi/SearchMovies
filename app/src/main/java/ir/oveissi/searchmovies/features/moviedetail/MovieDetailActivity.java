@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -81,6 +82,11 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     public void showMovieDetail(Movie movie) {
         tvMovieTitle.setText(movie.title);
         tvOverview.setText(movie.plot);
+    }
+
+    @Override
+    public void showToast(String txt) {
+        Toast.makeText(this, txt, Toast.LENGTH_SHORT).show();
     }
 
 }

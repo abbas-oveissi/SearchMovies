@@ -15,6 +15,7 @@ public interface MovieDetailContract {
 
         void showMovieDetail(Movie movie);
 
+        void showToast(String txt);
 
     }
 
