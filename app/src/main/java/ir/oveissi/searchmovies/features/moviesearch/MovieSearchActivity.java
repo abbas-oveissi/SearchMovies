@@ -105,6 +105,24 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
         });
 
 
+        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                title=query;
+                current_page=1;
+                mPresenter.onSearchButtonClick(query);
+                current_page++;
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //Do some magic
+                return false;
+            }
+        });
+
+
         mPresenter.onViewAttached(this);
         mPresenter.subscribe();
 
