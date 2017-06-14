@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,7 +25,7 @@ import ir.oveissi.searchmovies.R;
 import ir.oveissi.searchmovies.SearchMovieApplication;
 import ir.oveissi.searchmovies.features.moviedetail.MovieDetailActivity;
 import ir.oveissi.searchmovies.pojo.Movie;
-import ir.oveissi.searchmovies.utils.AdvancedEndlessRecyclerOnScrollListener;
+import ir.oveissi.searchmovies.utils.customviews.EndlessLinearLayoutRecyclerview;
 import ir.oveissi.searchmovies.utils.customviews.LoadingLayout;
 
 
@@ -38,7 +37,7 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
     private MovieSearchAdapter mListAdapter;
 
     @BindView(R.id.rvMovies)
-    RecyclerView rvMovies;
+    EndlessLinearLayoutRecyclerview rvMovies;
 
     @BindView(R.id.search_view)
     MaterialSearchView searchView;
@@ -53,7 +52,6 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
     Toolbar toolbar;
 
 
-    AdvancedEndlessRecyclerOnScrollListener advancedEndlessRecyclerOnScrollListener;
 
     public int current_page=1;
     @Override
@@ -63,7 +61,6 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_search);
         ButterKnife.bind(this);
-
         setSupportActionBar(toolbar);
 
         loadinglayout.setState(LoadingLayout.STATE_SHOW_DATA);
@@ -74,7 +71,7 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
             }
         });
 
-        rvMovies.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
+
         mListAdapter=new MovieSearchAdapter(MovieSearchActivity.this, new ArrayList<Movie>());
         mListAdapter.setItemClickListener(new MovieSearchAdapter.ItemClickListener() {
             @Override
@@ -96,18 +93,16 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
                 }
             }
         });
+
         rvMovies.setAdapter(mListAdapter);
-
-
-
-        advancedEndlessRecyclerOnScrollListener=new AdvancedEndlessRecyclerOnScrollListener((LinearLayoutManager) rvMovies.getLayoutManager()) {
+        rvMovies.setLayoutManager(new LinearLayoutManager(this));
+        rvMovies.setOnLoadMoreListener(new EndlessLinearLayoutRecyclerview.onLoadMoreListener() {
             @Override
             public void onLoadMore() {
                 mPresenter.getMoviesByTitle(title,current_page);
                 current_page++;
             }
-        };
-        rvMovies.addOnScrollListener(advancedEndlessRecyclerOnScrollListener);
+        });
 
         mPresenter.attachView(this);
         mPresenter.getMoviesByTitle(title,1);
@@ -141,7 +136,7 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
 
     @Override
     public void showMoreMovies(List<Movie> movies) {
-        advancedEndlessRecyclerOnScrollListener.setLoading(false);
+        rvMovies.setLoading(false);
         for(Movie p:movies)
         {
             mListAdapter.addItem(p);
