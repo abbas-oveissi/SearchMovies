@@ -11,6 +11,8 @@ import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import ir.oveissi.searchmovies.R;
 import ir.oveissi.searchmovies.SearchMovieApplication;
 import ir.oveissi.searchmovies.pojo.Movie;
@@ -21,10 +23,23 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     public MovieDetailContract.Presenter mPresenter;
 
 
-    TextView tvMovieTitle,tvOverview;
+
+    @BindView(R.id.tvMovieTitle)
+
+    TextView tvMovieTitle;
+
+    @BindView(R.id.tvOverview)
+    TextView  tvOverview;
+
     private String movie_id;
     private String image_path;
-    ImageView imageView;
+
+    @BindView(R.id.imPoster)
+    ImageView imPoster;
+
+    @BindView(R.id.myToolbar)
+    Toolbar toolbar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,12 +47,8 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.myToolbar);
+        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-
-        tvMovieTitle=(TextView) findViewById(R.id.tvMovieTitle);
-        tvOverview=(TextView)findViewById(R.id.tvOverview);
-        imageView=(ImageView)findViewById(R.id.imPoster);
 
 
         if(getIntent().getExtras()!=null)
@@ -52,7 +63,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
                 .noFade()
                 .placeholder(R.drawable.placeholder)
                 .networkPolicy(NetworkPolicy.OFFLINE)
-                .into(imageView);
+                .into(imPoster);
 
         mPresenter.attachView(this);
     }

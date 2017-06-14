@@ -74,6 +74,7 @@ dependencies {
 
     compile rootProject.ext.libraries.materialProgress
 
+    compile rootProject.ext.libraries.materialsearchview
 
 }
 

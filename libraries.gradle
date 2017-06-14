@@ -36,7 +36,9 @@ ext {
             firebaseCore : 'com.google.firebase:firebase-core:9.4.0',
             firebaseMessaging : 'com.google.firebase:firebase-messaging:9.4.0',
 
-            materialProgress : 'com.pnikosis:materialish-progress:1.7'
+            materialProgress : 'com.pnikosis:materialish-progress:1.7',
+            materialsearchview: 'com.miguelcatalan:materialsearchview:1.4.0'
+
     ]
 
 }

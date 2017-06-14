@@ -4,17 +4,27 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/myToolbar"
-        app:titleTextColor="#FFFF"
-        android:background="@color/colorPrimary"
+
+    <FrameLayout
+        android:id="@+id/toolbar_container"
         android:layout_width="match_parent"
-        android:minHeight="?attr/actionBarSize"
-        android:layout_height="wrap_content"/>
-    <ir.oveissi.searchmovies.utils.customviews.SearchView
-        android:id="@+id/svMovies"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/myToolbar"
+            app:titleTextColor="#FFFF"
+            android:background="@color/colorPrimary"
+            android:layout_width="match_parent"
+            android:minHeight="?attr/actionBarSize"
+            android:layout_height="wrap_content"/>
+
+        <com.miguelcatalan.materialsearchview.MaterialSearchView
+            android:id="@+id/search_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
+
+
     <View
         android:background="@color/colorPrimary"
         android:layout_width="match_parent"

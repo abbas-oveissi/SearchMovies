@@ -8,21 +8,26 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import ir.oveissi.searchmovies.R;
 import ir.oveissi.searchmovies.SearchMovieApplication;
 import ir.oveissi.searchmovies.features.moviedetail.MovieDetailActivity;
 import ir.oveissi.searchmovies.pojo.Movie;
 import ir.oveissi.searchmovies.utils.AdvancedEndlessRecyclerOnScrollListener;
 import ir.oveissi.searchmovies.utils.customviews.LoadingLayout;
-import ir.oveissi.searchmovies.utils.customviews.SearchView;
 
 
 public class MovieSearchActivity extends AppCompatActivity implements MovieSearchContract.View {
@@ -31,11 +36,25 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
     public MovieSearchPresenter mPresenter;
 
     private MovieSearchAdapter mListAdapter;
-    RecyclerView rv;
-    SearchView mSearchView;
+
+    @BindView(R.id.rvMovies)
+    RecyclerView rvMovies;
+
+    @BindView(R.id.search_view)
+    MaterialSearchView searchView;
+
+    @BindView(R.id.loadinglayout)
     LoadingLayout loadinglayout;
+
     public String title="";
+
+
+    @BindView(R.id.myToolbar)
+    Toolbar toolbar;
+
+
     AdvancedEndlessRecyclerOnScrollListener advancedEndlessRecyclerOnScrollListener;
+
     public int current_page=1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +62,10 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_search);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.myToolbar);
+        ButterKnife.bind(this);
+
         setSupportActionBar(toolbar);
 
-        rv=(RecyclerView)findViewById(R.id.rvMovies);
-        mSearchView=(SearchView)findViewById(R.id.svMovies);
-        loadinglayout=(LoadingLayout)findViewById(R.id.loadinglayout);
         loadinglayout.setState(LoadingLayout.STATE_SHOW_DATA);
         loadinglayout.setListener(new LoadingLayout.onErrorClickListener() {
             @Override
@@ -57,7 +74,7 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
             }
         });
 
-        rv.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
+        rvMovies.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
         mListAdapter=new MovieSearchAdapter(MovieSearchActivity.this, new ArrayList<Movie>());
         mListAdapter.setItemClickListener(new MovieSearchAdapter.ItemClickListener() {
             @Override
@@ -79,25 +96,18 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
                 }
             }
         });
-        rv.setAdapter(mListAdapter);
+        rvMovies.setAdapter(mListAdapter);
 
 
-        mSearchView.setListener(new SearchView.performSearchListener() {
-            @Override
-            public void performSearch(String terms) {
-                title=terms;
-                mPresenter.performSearch(terms);
-            }
-        });
 
-        advancedEndlessRecyclerOnScrollListener=new AdvancedEndlessRecyclerOnScrollListener((LinearLayoutManager) rv.getLayoutManager()) {
+        advancedEndlessRecyclerOnScrollListener=new AdvancedEndlessRecyclerOnScrollListener((LinearLayoutManager) rvMovies.getLayoutManager()) {
             @Override
             public void onLoadMore() {
                 mPresenter.getMoviesByTitle(title,current_page);
                 current_page++;
             }
         };
-        rv.addOnScrollListener(advancedEndlessRecyclerOnScrollListener);
+        rvMovies.addOnScrollListener(advancedEndlessRecyclerOnScrollListener);
 
         mPresenter.attachView(this);
         mPresenter.getMoviesByTitle(title,1);
@@ -138,7 +148,15 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+            getMenuInflater().inflate(R.menu.menu_main, menu);
 
+            MenuItem item = menu.findItem(R.id.action_search);
+            searchView.setMenuItem(item);
+
+            return true;
+    }
 
     @Override
     protected void onDestroy() {
