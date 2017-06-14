@@ -22,35 +22,35 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 import ir.oveissi.searchmovies.interactors.MovieInteractor;
 import ir.oveissi.searchmovies.interactors.remote.GeneralApiException;
 import ir.oveissi.searchmovies.pojo.Movie;
-import retrofit2.adapter.rxjava.HttpException;
-import rx.Observer;
-import rx.Subscription;
-import rx.subscriptions.CompositeSubscription;
+import retrofit2.HttpException;
 
 public class MovieSearchPresenter implements MovieSearchContract.Presenter {
 
 
     private MovieSearchContract.View viewLayer;
-    private CompositeSubscription compositeSubscription;
+    private CompositeDisposable compositeDisposable;
     private final MovieInteractor mMovieInteractor;
     private static final String TAG="MovieSearchPresenter";
 
     @Inject
     public MovieSearchPresenter(MovieInteractor mMovieInteractor) {
-        this.compositeSubscription = new CompositeSubscription();
+        this.compositeDisposable = new CompositeDisposable();
         this.mMovieInteractor = mMovieInteractor;
     }
 
     @Override
     public void onLoadMoviesByTitle(String title,int page) {
-        Subscription mSubscription=
+        Disposable disposable=
                 mMovieInteractor.getMoviesByTitle(title,page)
-                        .subscribe(new Observer<List<Movie>>() {
+                        .subscribeWith(new DisposableObserver<List<Movie>>() {
                             @Override
-                            public void onCompleted() {
+                            public void onComplete() {
                                 Log.d(TAG, "onCompleted: ");
                             }
 
@@ -78,7 +78,7 @@ public class MovieSearchPresenter implements MovieSearchContract.Presenter {
                                 viewLayer.showMoreMovies(movies);
                             }
                         });
-        compositeSubscription.add(mSubscription);
+        compositeDisposable.add(disposable);
     }
 
     @Override
@@ -101,7 +101,7 @@ public class MovieSearchPresenter implements MovieSearchContract.Presenter {
 
     @Override
     public void unsubscribe() {
-        compositeSubscription.clear();
+        compositeDisposable.clear();
     }
 
     @Override

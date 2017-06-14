@@ -21,12 +21,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
+import io.reactivex.functions.Function;
 import ir.oveissi.searchmovies.interactors.remote.SearchMoviesApiService;
 import ir.oveissi.searchmovies.pojo.Movie;
 import ir.oveissi.searchmovies.pojo.TmpMovies;
 import ir.oveissi.searchmovies.utils.SchedulerProvider;
-import rx.Observable;
-import rx.functions.Func1;
 
 
 public class MovieInteractorImpl implements MovieInteractor {
@@ -41,11 +41,11 @@ public class MovieInteractorImpl implements MovieInteractor {
     }
 
     @Override
-    public Observable<List<Movie>> getMoviesByTitle(String title,Integer page) {
+    public Observable<List<Movie>> getMoviesByTitle(String title, Integer page) {
         return this.searchMoviesApiService.getMoviesByTitle(title,page)
-                .map(new Func1<TmpMovies, List<Movie>>() {
+                .map(new Function<TmpMovies, List<Movie>>() {
                     @Override
-                    public List<Movie> call(TmpMovies tmpMovies) {
+                    public List<Movie> apply(TmpMovies tmpMovies) {
                         return tmpMovies.data;
                     }
                 })

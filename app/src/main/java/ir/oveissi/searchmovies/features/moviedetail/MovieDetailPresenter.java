@@ -20,34 +20,34 @@ import android.util.Log;
 
 import javax.inject.Inject;
 
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 import ir.oveissi.searchmovies.interactors.MovieInteractor;
 import ir.oveissi.searchmovies.interactors.remote.GeneralApiException;
 import ir.oveissi.searchmovies.pojo.Movie;
-import retrofit2.adapter.rxjava.HttpException;
-import rx.Observer;
-import rx.Subscription;
-import rx.subscriptions.CompositeSubscription;
+import retrofit2.HttpException;
 
 public class MovieDetailPresenter  implements MovieDetailContract.Presenter {
 
     private MovieDetailContract.View viewLayer;
-    private CompositeSubscription compositeSubscription;
+    private CompositeDisposable compositeDisposable;
     private final MovieInteractor mMovieInteractor;
     private static final String TAG="MovieDetailPresenter";
 
     @Inject
     public MovieDetailPresenter(MovieInteractor mMovieInteractor) {
-        this.compositeSubscription = new CompositeSubscription();
+        this.compositeDisposable = new CompositeDisposable();
         this.mMovieInteractor = mMovieInteractor;
     }
 
     @Override
     public void onLoadMovieDetail(String id) {
-        Subscription mSubscription=
+        Disposable disposable=
                 mMovieInteractor.getMovieByID(id)
-                        .subscribe(new Observer<Movie>() {
+                        .subscribeWith(new DisposableObserver<Movie>() {
                             @Override
-                            public void onCompleted() {
+                            public void onComplete() {
                                 Log.d(TAG, "onCompleted: ");
                             }
 
@@ -74,7 +74,7 @@ public class MovieDetailPresenter  implements MovieDetailContract.Presenter {
                                 viewLayer.showMovieDetail(movie);
                             }
                         });
-        compositeSubscription.add(mSubscription);
+        compositeDisposable.add(disposable);
     }
 
 
@@ -86,7 +86,7 @@ public class MovieDetailPresenter  implements MovieDetailContract.Presenter {
 
     @Override
     public void unsubscribe() {
-        compositeSubscription.clear();
+        compositeDisposable.clear();
     }
 
     @Override

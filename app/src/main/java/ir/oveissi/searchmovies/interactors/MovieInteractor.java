@@ -18,8 +18,8 @@ package ir.oveissi.searchmovies.interactors;
 
 import java.util.List;
 
+import io.reactivex.Observable;
 import ir.oveissi.searchmovies.pojo.Movie;
-import rx.Observable;
 
 /**
  * Main entry point for accessing tasks data.
@@ -27,8 +27,8 @@ import rx.Observable;
  */
 public interface MovieInteractor {
 
-    Observable<List<Movie>> getMoviesByTitle(String query,Integer page);
+    Observable<List<Movie>> getMoviesByTitle(String query, Integer page);
 
-    Observable<Movie> getMovieByID( String id);
+    Observable<Movie> getMovieByID(String id);
 
 }

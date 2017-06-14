@@ -1,6 +1,7 @@
 package ir.oveissi.searchmovies.utils;
 
-import rx.Scheduler;
+
+import io.reactivex.Scheduler;
 
 /**
  * Created by Abbas on 30/04/16.

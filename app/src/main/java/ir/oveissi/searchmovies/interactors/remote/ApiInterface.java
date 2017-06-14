@@ -1,11 +1,11 @@
 package ir.oveissi.searchmovies.interactors.remote;
 
+import io.reactivex.Observable;
 import ir.oveissi.searchmovies.pojo.Movie;
 import ir.oveissi.searchmovies.pojo.TmpMovies;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-import rx.Observable;
 
 /**
  * Created by Abbas on 24/05/2016.

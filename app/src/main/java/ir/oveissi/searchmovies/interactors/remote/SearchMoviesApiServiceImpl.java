@@ -4,11 +4,14 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.ObservableTransformer;
+import io.reactivex.functions.Function;
 import ir.oveissi.searchmovies.pojo.Movie;
 import ir.oveissi.searchmovies.pojo.TmpMovies;
-import retrofit2.adapter.rxjava.HttpException;
-import rx.Observable;
-import rx.functions.Func1;
+import retrofit2.HttpException;
+
 
 /**
  * Created by abbas on 7/18/16.
@@ -33,13 +36,13 @@ public class SearchMoviesApiServiceImpl implements SearchMoviesApiService{
     }
 
 
-    <T> Observable.Transformer<T, T> parseHttpErrors() {
-        return new Observable.Transformer<T, T>() {
+    <T> ObservableTransformer<T, T> parseHttpErrors() {
+        return new ObservableTransformer<T, T>() {
             @Override
-            public Observable<T> call(Observable<T> observable) {
-                return observable.onErrorResumeNext(new Func1<Throwable, Observable<? extends T>>() {
+            public Observable<T> apply(Observable<T> observable) {
+                return observable.onErrorResumeNext(new Function<Throwable, ObservableSource<? extends T>>() {
                     @Override
-                    public Observable<? extends T> call(Throwable throwable) {
+                    public Observable<? extends T> apply(Throwable throwable) {
                         if (throwable instanceof HttpException) {
 
                             Gson gson=new Gson();
