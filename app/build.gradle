@@ -5,8 +5,8 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
 
-    def versionMajor = 0
-    def versionMinor = 2
+    def versionMajor = 3
+    def versionMinor = 0
     def versionPatch = 0
 
 
