@@ -3,6 +3,7 @@ package ir.oveissi.searchmovies.features.moviesearch;
 import java.util.List;
 
 import ir.oveissi.searchmovies.pojo.Movie;
+import ir.oveissi.searchmovies.utils.bases.IPresenter;
 import ir.oveissi.searchmovies.utils.bases.IView;
 
 /**
@@ -24,10 +25,12 @@ public interface MovieSearchContract {
 
     }
 
-    interface Presenter {
+    interface Presenter extends IPresenter<MovieSearchContract.View> {
 
-        void getMoviesByTitle(String title,int page);
 
-        void performSearch(String terms);
+        void onSearchButtonClick(String terms);
+
+        void onLoadMoviesByTitle(String title,int page);
+
     }
 }

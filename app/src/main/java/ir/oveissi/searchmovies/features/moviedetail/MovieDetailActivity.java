@@ -51,11 +51,16 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
         setSupportActionBar(toolbar);
 
 
+
+
+        mPresenter.onViewAttached(this);
+        mPresenter.subscribe();
+
         if(getIntent().getExtras()!=null)
         {
             movie_id=getIntent().getStringExtra("movie_id");
             image_path=getIntent().getStringExtra("image_path");
-            mPresenter.getMovieDetailFromWebservice(movie_id);
+            mPresenter.onLoadMovieDetail(movie_id);
         }
 
         Picasso.with(this)
@@ -64,15 +69,14 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
                 .placeholder(R.drawable.placeholder)
                 .networkPolicy(NetworkPolicy.OFFLINE)
                 .into(imPoster);
-
-        mPresenter.attachView(this);
     }
 
     @Override
-    protected void onDestroy() {
-        this.mPresenter.detachView();
-        super.onDestroy();
+    protected void onStop() {
+        super.onStop();
+        mPresenter.unsubscribe();
     }
+
     @Override
     public void showMovieDetail(Movie movie) {
         tvMovieTitle.setText(movie.title);

@@ -18,8 +18,6 @@ package ir.oveissi.searchmovies.features.moviedetail;
 
 import android.util.Log;
 
-import java.lang.ref.WeakReference;
-
 import javax.inject.Inject;
 
 import ir.oveissi.searchmovies.interactors.MovieInteractor;
@@ -31,7 +29,7 @@ import rx.subscriptions.CompositeSubscription;
 
 public class MovieDetailPresenter  implements MovieDetailContract.Presenter {
 
-    private WeakReference<MovieDetailContract.View> mainView;
+    private MovieDetailContract.View viewLayer;
     private CompositeSubscription compositeSubscription;
     private final MovieInteractor mMovieInteractor;
     private static final String TAG="MovieDetailPresenter";
@@ -43,8 +41,7 @@ public class MovieDetailPresenter  implements MovieDetailContract.Presenter {
     }
 
     @Override
-    public void getMovieDetailFromWebservice(String id) {
-        checkCompositeSubscription();
+    public void onLoadMovieDetail(String id) {
         Subscription mSubscription=
                 mMovieInteractor.getMovieByID(id)
                         .subscribe(new Observer<Movie>() {
@@ -64,31 +61,27 @@ public class MovieDetailPresenter  implements MovieDetailContract.Presenter {
                             @Override
                             public void onNext(Movie movie) {
                                 Log.d(TAG, "onNext");
-                                if(doIfView()) {
-                                    mainView.get().showMovieDetail(movie);
-                                    mainView.get().showMovieDetail(movie);
-                                }
+                                viewLayer.showMovieDetail(movie);
+                                viewLayer.showMovieDetail(movie);
                             }
                         });
         compositeSubscription.add(mSubscription);
     }
 
 
-    public void attachView(MovieDetailContract.View view) {
-        this.mainView = new WeakReference<>(view);
+
+    @Override
+    public void subscribe() {
+
     }
 
-    public void detachView() {
-        this.mainView.clear();
-        this.compositeSubscription.clear();
+    @Override
+    public void unsubscribe() {
+        compositeSubscription.clear();
     }
 
-    public boolean doIfView() {
-        return this.mainView != null && this.mainView.get() != null;
-    }
-
-    public void checkCompositeSubscription() {
-        if (this.compositeSubscription == null || this.compositeSubscription.isUnsubscribed())
-            this.compositeSubscription = new CompositeSubscription();
+    @Override
+    public void onViewAttached(MovieDetailContract.View view) {
+        viewLayer=view;
     }
 }

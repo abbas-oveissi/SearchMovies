@@ -67,7 +67,7 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
         loadinglayout.setListener(new LoadingLayout.onErrorClickListener() {
             @Override
             public void onClick() {
-                mPresenter.performSearch(title);
+                mPresenter.onSearchButtonClick(title);
             }
         });
 
@@ -99,14 +99,23 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
         rvMovies.setOnLoadMoreListener(new EndlessLinearLayoutRecyclerview.onLoadMoreListener() {
             @Override
             public void onLoadMore() {
-                mPresenter.getMoviesByTitle(title,current_page);
+                mPresenter.onLoadMoviesByTitle(title,current_page);
                 current_page++;
             }
         });
 
-        mPresenter.attachView(this);
-        mPresenter.getMoviesByTitle(title,1);
+
+        mPresenter.onViewAttached(this);
+        mPresenter.subscribe();
+
+        mPresenter.onLoadMoviesByTitle(title,1);
         current_page++;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mPresenter.unsubscribe();
     }
 
 
@@ -153,9 +162,5 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
             return true;
     }
 
-    @Override
-    protected void onDestroy() {
-        this.mPresenter.detachView();
-        super.onDestroy();
-    }
+
 }

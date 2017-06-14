@@ -18,7 +18,6 @@ package ir.oveissi.searchmovies.features.moviesearch;
 
 import android.util.Log;
 
-import java.lang.ref.WeakReference;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -33,7 +32,7 @@ import rx.subscriptions.CompositeSubscription;
 public class MovieSearchPresenter implements MovieSearchContract.Presenter {
 
 
-    private WeakReference<MovieSearchContract.View> mainView;
+    private MovieSearchContract.View viewLayer;
     private CompositeSubscription compositeSubscription;
     private final MovieInteractor mMovieInteractor;
     private static final String TAG="MovieSearchPresenter";
@@ -45,8 +44,7 @@ public class MovieSearchPresenter implements MovieSearchContract.Presenter {
     }
 
     @Override
-    public void getMoviesByTitle(String title,int page) {
-        checkCompositeSubscription();
+    public void onLoadMoviesByTitle(String title,int page) {
         Subscription mSubscription=
                 mMovieInteractor.getMoviesByTitle(title,page)
                         .subscribe(new Observer<List<Movie>>() {
@@ -61,58 +59,44 @@ public class MovieSearchPresenter implements MovieSearchContract.Presenter {
                                     Log.d(TAG, "onError StatusCode: "+((HttpException) e).code());
                                 }
                                 Log.d(TAG, "onError");
-                                if(doIfView())
-                                    mainView.get().showToast("خطا رخ داد.");
+                                viewLayer.showToast("خطا رخ داد.");
                             }
 
                             @Override
                             public void onNext(List<Movie> movies) {
                                 Log.d(TAG, "onNext");
-                                if(doIfView()) {
-                                    mainView.get().hideLoadingForMovies();
-                                    mainView.get().showMoreMovies(movies);
-                                }
+                                viewLayer.hideLoadingForMovies();
+                                viewLayer.showMoreMovies(movies);
                             }
                         });
         compositeSubscription.add(mSubscription);
     }
 
     @Override
-    public void performSearch(String terms) {
+    public void onSearchButtonClick(String terms) {
         if(terms.length()<=2)
         {
-            if(doIfView()) {
-                mainView.get().showToast("لطفا بیشتر از 2 کاراکتر وارد کنید.");
-            }
+            viewLayer.showToast("لطفا بیشتر از 2 کاراکتر وارد کنید.");
         }
 
-        if(doIfView()) {
-            mainView.get().showLoadingForMovies();
-            mainView.get().clearMovies();
-        }
-        getMoviesByTitle(terms,1);
-
+        viewLayer.showLoadingForMovies();
+        viewLayer.clearMovies();
+        onLoadMoviesByTitle(terms,1);
     }
 
 
+    @Override
+    public void subscribe() {
 
-    public void attachView(MovieSearchContract.View view) {
-        this.mainView = new WeakReference<>(view);
     }
 
-    public void detachView() {
-        this.mainView.clear();
-        this.compositeSubscription.clear();
+    @Override
+    public void unsubscribe() {
+        compositeSubscription.clear();
     }
 
-    public boolean doIfView() {
-        return this.mainView != null && this.mainView.get() != null;
+    @Override
+    public void onViewAttached(MovieSearchContract.View view) {
+        viewLayer=view;
     }
-
-    public void checkCompositeSubscription() {
-        if (this.compositeSubscription == null || this.compositeSubscription.isUnsubscribed())
-            this.compositeSubscription = new CompositeSubscription();
-    }
-
-
 }

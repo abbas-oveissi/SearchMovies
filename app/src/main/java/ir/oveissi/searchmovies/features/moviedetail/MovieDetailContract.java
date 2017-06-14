@@ -19,6 +19,6 @@ public interface MovieDetailContract {
     }
 
     interface Presenter extends IPresenter<MovieDetailContract.View> {
-        void getMovieDetailFromWebservice(String id);
+        void onLoadMovieDetail(String id);
     }
 }

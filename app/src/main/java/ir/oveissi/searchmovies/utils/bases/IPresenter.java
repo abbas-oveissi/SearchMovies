@@ -17,8 +17,15 @@
 package ir.oveissi.searchmovies.utils.bases;
 
 public interface IPresenter<T> {
-    void attachView(T view);
-    void detachView();
-    boolean doIfView();
-    void checkCompositeSubscription();
+
+    void subscribe();
+
+    void unsubscribe();
+
+    /**
+     * This method will be invoked during {@link android.app.Activity#onStart()}, {@link android.app.Fragment#onResume()}
+     * and {@link android.view.View#onAttachedToWindow()}.
+     */
+    void onViewAttached(T view);
+
 }
