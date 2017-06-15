@@ -4,4 +4,4 @@ This project is an example of MVP architecture pattern, which uses tools and lib
 [Demo Apk](https://github.com/abbas-oveissi/SearchMovies/releases/download/v3.0.0/SearchMovies-normal-debug-3.0.0.apk)
 ## Demo
 
-![Alt Text](http://oveissi.ir/githubAssets/searchmovies.gif)
+![Alt Text](http://oveissi.ir/githubAssets/searchmovie3.gif)
