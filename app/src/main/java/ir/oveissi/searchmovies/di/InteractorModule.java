@@ -9,7 +9,7 @@ import ir.oveissi.searchmovies.interactors.MovieInteractorImpl;
  * Created by abbas on 7/5/16.
  */
 @Module
-public class InteractorMadule {
+public class InteractorModule {
 
     @Provides
     public MovieInteractor provideMovieInteractor(MovieInteractorImpl interactor) {

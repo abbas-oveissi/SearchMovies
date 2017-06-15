@@ -17,7 +17,7 @@ import ir.oveissi.searchmovies.features.moviesearch.MovieSearchPresenterModule;
         AndroidModule.class,
         ApplicationModule.class,
         ApiModule.class,
-        InteractorMadule.class,
+        InteractorModule.class,
         ClientModule.class,
 })
 public interface ApplicationComponent {
