@@ -12,7 +12,7 @@ import ir.oveissi.searchmovies.interactors.MovieInteractorImpl;
 public class InteractorModule {
 
     @Provides
-    public MovieInteractor provideMovieInteractor(MovieInteractorImpl interactor) {
+    public static MovieInteractor provideMovieInteractor(MovieInteractorImpl interactor) {
         return interactor;
     }
 

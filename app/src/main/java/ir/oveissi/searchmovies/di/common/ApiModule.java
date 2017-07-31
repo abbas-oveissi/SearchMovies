@@ -26,13 +26,13 @@ public class ApiModule {
 
     @Provides
     @Singleton
-    public SearchMoviesApiService provideSearchMoviesApiService(Retrofit retrofit) {
+    public static  SearchMoviesApiService provideSearchMoviesApiService(Retrofit retrofit) {
         return new SearchMoviesApiServiceImpl(retrofit.create(ApiInterface.class));
     }
 
     @Provides
     @Singleton
-    public Retrofit provideRetrofit(@Named("BaseUrl") String baseUrl, Converter.Factory converterFactory, CallAdapter.Factory callAdapterFactory, OkHttpClient okHttpClient) {
+    public  static Retrofit provideRetrofit(@Named("BaseUrl") String baseUrl, Converter.Factory converterFactory, CallAdapter.Factory callAdapterFactory, OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(converterFactory)
@@ -43,20 +43,20 @@ public class ApiModule {
 
     @Singleton
     @Provides
-    public Gson provideGson() {
+    public  static Gson provideGson() {
         return new Gson();
     }
 
 
     @Provides
     @Singleton
-    public CallAdapter.Factory provideRxJavaCallAdapterFactory() {
+    public  static CallAdapter.Factory provideRxJavaCallAdapterFactory() {
         return RxJava2CallAdapterFactory.create();
     }
 
     @Provides
     @Singleton
-    public Converter.Factory provideGsonConverterFactory(Gson gson) {
+    public  static Converter.Factory provideGsonConverterFactory(Gson gson) {
         return GsonConverterFactory.create(gson);
     }
 }

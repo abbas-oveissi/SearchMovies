@@ -18,14 +18,14 @@ public final class ApplicationModule {
     @Provides
     @Singleton
     @Named("isDebug")
-    public boolean provideIsDebug() {
+    public static boolean provideIsDebug() {
         return BuildConfig.DEBUG;
     }
 
     @Provides
     @Singleton
     @Named("networkTimeoutInSeconds")
-    public int provideNetworkTimeoutInSeconds() {
+    public static int provideNetworkTimeoutInSeconds() {
         return 30;
     }
 
@@ -34,14 +34,14 @@ public final class ApplicationModule {
     @Provides
     @Singleton
     @Named("BaseUrl")
-    public String provideBaseUrl() {
+    public static String provideBaseUrl() {
         return Constants.BASE_URL;
     }
 
 
     @Provides
     @Singleton
-    public SchedulerProvider provideAppScheduler() {
+    public static SchedulerProvider provideAppScheduler() {
         return new SchedulerProviderImpl();
     }
 

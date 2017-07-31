@@ -18,7 +18,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 public class ClientModule {
     @Singleton
     @Provides
-    public OkHttpClient provideOkHttpClient(HttpLoggingInterceptor loggingInterceptor,
+    public static OkHttpClient provideOkHttpClient(HttpLoggingInterceptor loggingInterceptor,
                                             @Named("networkTimeoutInSeconds") int networkTimeoutInSeconds,
                                             @Named("isDebug") boolean isDebug) {
 
@@ -34,7 +34,7 @@ public class ClientModule {
 
     @Singleton
     @Provides
-    public HttpLoggingInterceptor provideHttpLoggingInterceptor() {
+    public static HttpLoggingInterceptor provideHttpLoggingInterceptor() {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         return logging;
