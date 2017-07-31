@@ -3,6 +3,7 @@ package ir.oveissi.searchmovies.di;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 import ir.oveissi.searchmovies.BuildConfig;
@@ -14,7 +15,7 @@ import ir.oveissi.searchmovies.utils.SchedulerProviderImpl;
  * Created by abbas on 6/25/16.
  */
 @Module
-public final class ApplicationModule {
+public abstract class ApplicationModule {
     @Provides
     @Singleton
     @Named("isDebug")
@@ -39,10 +40,8 @@ public final class ApplicationModule {
     }
 
 
-    @Provides
+    @Binds
     @Singleton
-    public static SchedulerProvider provideAppScheduler() {
-        return new SchedulerProviderImpl();
-    }
+    public abstract SchedulerProvider provideAppScheduler(SchedulerProviderImpl schedulerProvider) ;
 
 }

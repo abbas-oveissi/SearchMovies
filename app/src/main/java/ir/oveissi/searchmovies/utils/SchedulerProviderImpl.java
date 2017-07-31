@@ -1,6 +1,8 @@
 package ir.oveissi.searchmovies.utils;
 
 
+import javax.inject.Inject;
+
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -10,6 +12,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class SchedulerProviderImpl implements SchedulerProvider {
 
+    @Inject
     public SchedulerProviderImpl() {
     }
 
