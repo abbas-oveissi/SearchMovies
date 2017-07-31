@@ -16,30 +16,24 @@ import ir.oveissi.searchmovies.SearchMovieApplication;
  */
 @Module
 public class AndroidModule {
-    private SearchMovieApplication searchMovieApplication;
     int PRIVATE_MODE = 0;
 
-
-    public AndroidModule(SearchMovieApplication searchMovieApplication) {
-        this.searchMovieApplication = searchMovieApplication;
+    @Provides
+    @Singleton
+    public Context provideContext(SearchMovieApplication application) {
+        return application.getApplicationContext();
     }
 
     @Provides
     @Singleton
-    public Context provideContext() {
-        return searchMovieApplication.getApplicationContext();
+    public Resources provideResources(SearchMovieApplication application) {
+        return application.getResources();
     }
 
     @Provides
     @Singleton
-    public Resources provideResources() {
-        return searchMovieApplication.getResources();
-    }
-
-    @Provides
-    @Singleton
-    public SharedPreferences provideSharedPreferences() {
-        return PreferenceManager.getDefaultSharedPreferences(searchMovieApplication);
+    public SharedPreferences provideSharedPreferences(SearchMovieApplication application) {
+        return PreferenceManager.getDefaultSharedPreferences(application);
     }
 
 }

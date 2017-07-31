@@ -2,7 +2,6 @@ package ir.oveissi.searchmovies;
 
 import android.app.Application;
 
-import ir.oveissi.searchmovies.di.AndroidModule;
 import ir.oveissi.searchmovies.di.ApplicationComponent;
 import ir.oveissi.searchmovies.di.DaggerApplicationComponent;
 
@@ -16,7 +15,7 @@ public class SearchMovieApplication extends Application {
     public void onCreate() {
         super.onCreate();
         component = DaggerApplicationComponent.builder()
-                .androidModule(getAndroidModule())
+                .application(this)
                 .build();
 
 
@@ -26,10 +25,6 @@ public class SearchMovieApplication extends Application {
 
     public static ApplicationComponent getComponent() {
         return component;
-    }
-
-    protected AndroidModule getAndroidModule() {
-        return new AndroidModule(this);
     }
 
 }
