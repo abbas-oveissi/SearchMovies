@@ -18,4 +18,5 @@ package ir.oveissi.searchmovies.utils.bases;
 
 public interface IView<T> {
 
+    void showToast(String txt);
 }

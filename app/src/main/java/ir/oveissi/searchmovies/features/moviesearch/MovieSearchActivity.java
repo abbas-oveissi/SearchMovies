@@ -29,7 +29,7 @@ import ir.oveissi.searchmovies.utils.customviews.EndlessLinearLayoutRecyclerview
 import ir.oveissi.searchmovies.utils.customviews.LoadingLayout;
 
 
-public class MovieSearchActivity extends AppCompatActivity implements MovieSearchContract.View {
+public class MovieSearchActivity extends AppCompatActivity implements MovieSearchContract.View, MovieSearchAdapter.ItemClickListener {
 
     @Inject
     public MovieSearchPresenter mPresenter;
@@ -45,15 +45,15 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
     @BindView(R.id.loadinglayout)
     LoadingLayout loadinglayout;
 
-    public String title="";
+    public String title = "";
 
 
     @BindView(R.id.myToolbar)
     Toolbar toolbar;
 
 
+    public int current_page = 1;
 
-    public int current_page=1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SearchMovieApplication.getComponent().plus(new MovieSearchPresenterModule()).inject(this);
@@ -64,52 +64,25 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
         setSupportActionBar(toolbar);
 
         loadinglayout.setState(LoadingLayout.STATE_SHOW_DATA);
-        loadinglayout.setListener(new LoadingLayout.onErrorClickListener() {
-            @Override
-            public void onClick() {
-                mPresenter.onSearchButtonClick(title);
-            }
-        });
+        loadinglayout.setListener(() -> mPresenter.onSearchButtonClick(title));
 
 
-        mListAdapter=new MovieSearchAdapter(MovieSearchActivity.this, new ArrayList<Movie>());
-        mListAdapter.setItemClickListener(new MovieSearchAdapter.ItemClickListener() {
-            @Override
-            public void ItemClicked(int position, Movie item, ImageView imPoster) {
-
-                Intent i=new Intent(MovieSearchActivity.this,MovieDetailActivity.class);
-                i.putExtra("movie_id",String.valueOf(item.id));
-                i.putExtra("image_path",item.poster);
-                if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP)
-                {
-                    ActivityOptionsCompat option =
-                            ActivityOptionsCompat.makeSceneTransitionAnimation(
-                                    MovieSearchActivity.this,imPoster,"imPoster");
-                    startActivity(i,option.toBundle());
-                }
-                else
-                {
-                    startActivity(i);
-                }
-            }
-        });
+        mListAdapter = new MovieSearchAdapter(MovieSearchActivity.this, new ArrayList<>());
+        mListAdapter.setItemClickListener(this);
 
         rvMovies.setAdapter(mListAdapter);
         rvMovies.setLayoutManager(new LinearLayoutManager(this));
-        rvMovies.setOnLoadMoreListener(new EndlessLinearLayoutRecyclerview.onLoadMoreListener() {
-            @Override
-            public void onLoadMore() {
-                mPresenter.onLoadMoviesByTitle(title,current_page);
-                current_page++;
-            }
+        rvMovies.setOnLoadMoreListener(() -> {
+            mPresenter.onLoadMoviesByTitle(title, current_page);
+            current_page++;
         });
 
 
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                title=query;
-                current_page=1;
+                title = query;
+                current_page = 1;
                 mPresenter.onSearchButtonClick(query);
                 current_page++;
                 return true;
@@ -126,7 +99,7 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
         mPresenter.onViewAttached(this);
         mPresenter.subscribe();
 
-        mPresenter.onLoadMoviesByTitle(title,1);
+        mPresenter.onLoadMoviesByTitle(title, 1);
         current_page++;
     }
 
@@ -137,9 +110,7 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
     }
 
 
-
-    public void clearMovies()
-    {
+    public void clearMovies() {
         mListAdapter.clear();
     }
 
@@ -149,36 +120,48 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
     }
 
 
-    public void showLoadingForMovies()
-    {
+    public void showLoadingForMovies() {
         loadinglayout.setState(LoadingLayout.STATE_LOADING);
 
     }
 
-    public void hideLoadingForMovies()
-    {
-        if(loadinglayout.getState()!=LoadingLayout.STATE_SHOW_DATA)
+    public void hideLoadingForMovies() {
+        if (loadinglayout.getState() != LoadingLayout.STATE_SHOW_DATA)
             loadinglayout.setState(LoadingLayout.STATE_SHOW_DATA);
     }
 
     @Override
     public void showMoreMovies(List<Movie> movies) {
         rvMovies.setLoading(false);
-        for(Movie p:movies)
-        {
+        for (Movie p : movies) {
             mListAdapter.addItem(p);
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-            getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
 
-            MenuItem item = menu.findItem(R.id.action_search);
-            searchView.setMenuItem(item);
+        MenuItem item = menu.findItem(R.id.action_search);
+        searchView.setMenuItem(item);
 
-            return true;
+        return true;
     }
 
 
+    @Override
+    public void ItemClicked(int position, Movie item, ImageView imPoster) {
+        Intent i = new Intent(MovieSearchActivity.this, MovieDetailActivity.class);
+        i.putExtra("movie_id", String.valueOf(item.id));
+        i.putExtra("image_path", item.poster);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ActivityOptionsCompat option =
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(
+                            MovieSearchActivity.this, imPoster, "imPoster");
+            startActivity(i, option.toBundle());
+        } else {
+            startActivity(i);
+        }
+    }
 }
+

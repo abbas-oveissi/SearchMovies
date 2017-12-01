@@ -1,43 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/myToolbar"
-        app:titleTextColor="#FFFF"
-        android:background="@color/colorPrimary"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:minHeight="?attr/actionBarSize"
-        android:layout_height="wrap_content"/>
+        android:layout_height="?attr/actionBarSize">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/myToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            app:contentInsetEnd="0dp"
+            app:contentInsetLeft="0dp"
+            app:contentInsetRight="0dp"
+            app:contentInsetStart="0dp"
+            app:titleTextColor="#FFFF">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/imageview_activity_movie_detail_back"
+                    android:layout_width="@dimen/toolbar_icon_size"
+                    android:layout_height="@dimen/toolbar_icon_size"
+                    android:layout_margin="@dimen/standard_margin"
+                    app:srcCompat="@drawable/ic_arrow_back_black_24dp" />
+
+                <TextView
+                    android:id="@+id/textview_product_detail_toolbar_title"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/imageview_activity_movie_detail_back"
+                    android:ellipsize="marquee"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:freezesText="true"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:paddingEnd="@dimen/standard_padding"
+                    android:paddingLeft="15dip"
+                    android:paddingRight="15dip"
+                    android:paddingStart="@dimen/standard_padding"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/toolbar_title_size" />
+
+            </RelativeLayout>
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
 
     <ImageView
+        android:id="@+id/imPoster"
+        android:layout_width="150dp"
+        android:layout_height="200dp"
         android:layout_gravity="center_horizontal"
         android:layout_margin="5dp"
-        android:id="@+id/imPoster"
-        android:transitionName="imPoster"
-        android:layout_width="150dp"
-        android:layout_height="200dp" />
-
-    <TextView
-        android:id="@+id/tvMovieTitle"
-        android:text="title"
-        android:layout_margin="16dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-
-
+        android:transitionName="imPoster" />
 
 
     <TextView
         android:id="@+id/tvOverview"
-        android:text="overview"
-        android:layout_margin="16dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="overview" />
 
 
 </LinearLayout>

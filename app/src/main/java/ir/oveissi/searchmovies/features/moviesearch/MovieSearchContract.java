@@ -17,8 +17,6 @@ public interface MovieSearchContract {
 
         void clearMovies();
 
-        void showToast(String txt);
-
         void showLoadingForMovies();
 
         void hideLoadingForMovies();
