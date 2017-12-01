@@ -16,4 +16,8 @@ public class Utility {
     {
         return (int) (px / Resources.getSystem().getDisplayMetrics().density);
     }
+
+    public static boolean isNotNullOrEmpty(String string) {
+        return !(string == null || string.length() == 0);
+    }
 }

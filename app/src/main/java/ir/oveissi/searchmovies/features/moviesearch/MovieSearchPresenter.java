@@ -83,10 +83,6 @@ public class MovieSearchPresenter implements MovieSearchContract.Presenter {
 
     @Override
     public void onSearchButtonClick(String terms) {
-        if(terms.length()<=2)
-        {
-            viewLayer.showToast("لطفا بیشتر از 2 کاراکتر وارد کنید.");
-        }
 
         viewLayer.showLoadingForMovies();
         viewLayer.clearMovies();

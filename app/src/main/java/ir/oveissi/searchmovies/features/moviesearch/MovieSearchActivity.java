@@ -12,21 +12,28 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import ir.oveissi.searchmovies.R;
 import ir.oveissi.searchmovies.SearchMovieApplication;
 import ir.oveissi.searchmovies.features.moviedetail.MovieDetailActivity;
 import ir.oveissi.searchmovies.pojo.Movie;
 import ir.oveissi.searchmovies.utils.customviews.EndlessLinearLayoutRecyclerview;
 import ir.oveissi.searchmovies.utils.customviews.LoadingLayout;
+
+import static ir.oveissi.searchmovies.utils.Utility.isNotNullOrEmpty;
 
 
 public class MovieSearchActivity extends AppCompatActivity implements MovieSearchContract.View, MovieSearchAdapter.ItemClickListener {
@@ -76,15 +83,18 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
             mPresenter.onLoadMoviesByTitle(title, current_page);
             current_page++;
         });
+        RxTextView.textChanges(searchView.getRootView().findViewById(R.id.searchTextView))
+                .filter(charSequence -> isNotNullOrEmpty(charSequence.toString()))
+                .debounce(500, TimeUnit.MILLISECONDS).map(CharSequence::toString)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::submitQuery);
 
 
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                title = query;
-                current_page = 1;
-                mPresenter.onSearchButtonClick(query);
-                current_page++;
+                submitQuery(query);
                 return true;
             }
 
@@ -100,6 +110,13 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
         mPresenter.subscribe();
 
         mPresenter.onLoadMoviesByTitle(title, 1);
+        current_page++;
+    }
+
+    private void submitQuery(String inputSearch) {
+        title = inputSearch;
+        current_page = 1;
+        mPresenter.onSearchButtonClick(inputSearch);
         current_page++;
     }
 
