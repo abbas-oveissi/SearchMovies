@@ -1,6 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
-apply plugin: 'me.tatarka.retrolambda'
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -35,14 +33,6 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    productFlavors {
-        dev {
-            minSdkVersion 21
-        }
-        normal {
-        }
-    }
-
 }
 
 
@@ -61,7 +51,7 @@ dependencies {
     compile rootProject.ext.libraries.rxbinding
 
     compile rootProject.ext.libraries.butterknife
-    apt rootProject.ext.libraries.butterknifeCompiler
+    annotationProcessor rootProject.ext.libraries.butterknifeCompiler
 
     compile rootProject.ext.libraries.retrofit
     compile rootProject.ext.libraries.retrofitConverter
@@ -72,7 +62,7 @@ dependencies {
     compile rootProject.ext.libraries.picasso
 
     compile rootProject.ext.libraries.dagger
-    provided rootProject.ext.libraries.daggerCompiler
+    annotationProcessor rootProject.ext.libraries.daggerCompiler
 
     compile rootProject.ext.libraries.materialProgress
 
@@ -81,16 +71,17 @@ dependencies {
 }
 
 android.applicationVariants.all { variant ->
+
     def appName
     if (project.hasProperty("applicationName")) {
         appName = "${applicationName}"
     } else {
         appName = parent.name
     }
-    variant.outputs.each { output ->
+    variant.outputs.all { output ->
         def newApkName
         newApkName = "${appName}-${output.baseName}-${variant.versionName}.apk"
-        output.outputFile = new File(output.outputFile.parent, newApkName)
+        output.outputFileName = new File(newApkName)
     }
 }
 
