@@ -26,43 +26,35 @@ public class SearchMoviesApiServiceImpl implements SearchMoviesApiService{
     @Override
     public Observable<TmpMovies> getMoviesByTitle(String query,Integer page) {
         return api.getMoviesByTitle(query,page)
-                .compose(this.<TmpMovies>parseHttpErrors());
+                .compose(this.parseHttpErrors());
     }
 
     @Override
     public Observable<Movie> getMovieById(String id) {
         return api.getMovieById(id)
-                .compose(this.<Movie>parseHttpErrors());
+                .compose(this.parseHttpErrors());
     }
 
 
     <T> ObservableTransformer<T, T> parseHttpErrors() {
-        return new ObservableTransformer<T, T>() {
-            @Override
-            public Observable<T> apply(Observable<T> observable) {
-                return observable.onErrorResumeNext(new Function<Throwable, ObservableSource<? extends T>>() {
-                    @Override
-                    public Observable<? extends T> apply(Throwable throwable) {
-                        if (throwable instanceof HttpException) {
+        return observable -> observable.onErrorResumeNext((Function<Throwable, ObservableSource<? extends T>>) throwable -> {
+            if (throwable instanceof HttpException) {
 
-                            Gson gson=new Gson();
-                            GeneralApiException generalApiException=null;
-                            try {
-                                generalApiException=gson.fromJson(((HttpException) throwable).response().errorBody().string(),GeneralApiException.class);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                Gson gson=new Gson();
+                GeneralApiException generalApiException=null;
+                try {
+                    generalApiException=gson.fromJson(((HttpException) throwable).response().errorBody().string(),GeneralApiException.class);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-                            if(generalApiException==null)
-                                return Observable.error(throwable);
-                            else
-                                return Observable.error(generalApiException);
-                        }
-                        // if not the kind we're interested in, then just report the same error to onError()
-                        return Observable.error(throwable);
-                    }
-                });
+                if(generalApiException==null)
+                    return Observable.error(throwable);
+                else
+                    return Observable.error(generalApiException);
             }
-        };
+            // if not the kind we're interested in, then just report the same error to onError()
+            return Observable.error(throwable);
+        });
     }
 }

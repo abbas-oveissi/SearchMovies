@@ -58,6 +58,7 @@ dependencies {
 
     compile rootProject.ext.libraries.rxjava
     compile rootProject.ext.libraries.rxandroid
+    compile rootProject.ext.libraries.rxbinding
 
     compile rootProject.ext.libraries.butterknife
     apt rootProject.ext.libraries.butterknifeCompiler

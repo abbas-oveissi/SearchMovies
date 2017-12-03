@@ -19,12 +19,12 @@ public class MovieSearchAdapter extends RecyclerView.Adapter<MovieSearchAdapter.
     private Context mContext;
     private List<Movie> itemsData;
 
-    public MovieSearchAdapter(Context mContext, List<Movie> itemsData) {
+    MovieSearchAdapter(Context mContext, List<Movie> itemsData) {
         this.mContext = mContext;
         this.itemsData = itemsData;
     }
 
-    public void setItemClickListener(ItemClickListener itemClickListener) {
+    void setItemClickListener(ItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
     ItemClickListener itemClickListener;
@@ -33,12 +33,12 @@ public class MovieSearchAdapter extends RecyclerView.Adapter<MovieSearchAdapter.
     }
 
 
-    public void clear()
+    void clear()
     {
         this.itemsData.clear();
         notifyDataSetChanged();
     }
-    public void addItem(Movie post)
+    void addItem(Movie post)
     {
         this.itemsData.add(post);
         notifyItemInserted(this.itemsData.size()-1);
@@ -48,8 +48,7 @@ public class MovieSearchAdapter extends RecyclerView.Adapter<MovieSearchAdapter.
     public MovieSearchAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemLayoutView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.row_movie,  parent, false);
-        ViewHolder viewHolder = new ViewHolder(itemLayoutView,mContext,this);
-        return viewHolder;
+        return new ViewHolder(itemLayoutView,mContext, this);
     }
 
     @Override
@@ -59,17 +58,16 @@ public class MovieSearchAdapter extends RecyclerView.Adapter<MovieSearchAdapter.
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        public Movie item;
-        public Context mcontext;
-        public TextView tvMovieTitle;
-        private final MovieSearchAdapter movieSearchAdapter;
-        public ImageView imPoster;
-        public ViewHolder(View itemLayoutView,Context context,MovieSearchAdapter movieSearchAdapter) {
+        Context mcontext;
+        TextView tvMovieTitle;
+        final MovieSearchAdapter movieSearchAdapter;
+        ImageView imPoster;
+        ViewHolder(View itemLayoutView, Context context, MovieSearchAdapter movieSearchAdapter) {
             super(itemLayoutView);
             this.mcontext = context;
-            tvMovieTitle = (TextView) itemLayoutView.findViewById(R.id.tvMovieTitle);
+            tvMovieTitle = itemLayoutView.findViewById(R.id.tvMovieTitle);
             this.movieSearchAdapter = movieSearchAdapter;
-            imPoster = (ImageView) itemLayoutView.findViewById(R.id.imPoster);
+            imPoster = itemLayoutView.findViewById(R.id.imPoster);
             itemLayoutView.setOnClickListener(this);
 
         }
