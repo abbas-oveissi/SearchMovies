@@ -1,8 +1,7 @@
 package ir.oveissi.searchmovies.features.moviesearch;
 
-import java.util.List;
-
 import ir.oveissi.searchmovies.pojo.Movie;
+import ir.oveissi.searchmovies.pojo.Pagination;
 import ir.oveissi.searchmovies.utils.bases.IPresenter;
 import ir.oveissi.searchmovies.utils.bases.IView;
 
@@ -13,14 +12,15 @@ public interface MovieSearchContract {
 
     interface View extends IView<Presenter> {
 
-        void showMoreMovies(List<Movie> tasks);
+        void showMoreMovies(Pagination<Movie> tasks);
 
         void clearMovies();
 
-        void showLoadingForMovies();
+        void showLoading();
 
-        void hideLoadingForMovies();
+        void showData();
 
+        void showError(String error);
     }
 
     interface Presenter extends IPresenter<MovieSearchContract.View> {
@@ -28,7 +28,7 @@ public interface MovieSearchContract {
 
         void onSearchButtonClick(String terms);
 
-        void onLoadMoviesByTitle(String title,int page);
+        void onLoadMoviesByTitle(String title, int page);
 
     }
 }

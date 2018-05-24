@@ -1,6 +1,8 @@
 package ir.oveissi.searchmovies.di.common;
 
 
+import android.content.Context;
+
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Named;
@@ -8,6 +10,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import ir.oveissi.searchmovies.utils.ConnectivityInterceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
@@ -19,11 +22,13 @@ public class ClientModule {
     @Singleton
     @Provides
     public static OkHttpClient provideOkHttpClient(HttpLoggingInterceptor loggingInterceptor,
-                                            @Named("networkTimeoutInSeconds") int networkTimeoutInSeconds,
-                                            @Named("isDebug") boolean isDebug) {
+                                                   Context context,
+                                                   @Named("networkTimeoutInSeconds") int networkTimeoutInSeconds,
+                                                   @Named("isDebug") boolean isDebug) {
 
         OkHttpClient.Builder okHttpClient = new OkHttpClient.Builder()
                 .readTimeout(networkTimeoutInSeconds, TimeUnit.SECONDS)
+                .addInterceptor(new ConnectivityInterceptor(context))
                 .connectTimeout(networkTimeoutInSeconds, TimeUnit.SECONDS);
 
         if (isDebug)
@@ -36,7 +41,7 @@ public class ClientModule {
     @Provides
     public static HttpLoggingInterceptor provideHttpLoggingInterceptor() {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
         return logging;
 
     }

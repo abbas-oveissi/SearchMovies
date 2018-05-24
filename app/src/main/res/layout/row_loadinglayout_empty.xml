@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="15dp"
+    android:layout_centerInParent="true"
+    android:orientation="vertical"
+    android:layout_centerHorizontal="true"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/imEmpty"
+        android:layout_gravity="center"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:gravity="center_horizontal"
+        app:srcCompat="@drawable/ic_blank_page"
+        />
+    <TextView
+        android:id="@+id/tvEmpty"
+        android:textSize="16sp"
+        android:layout_gravity="center"
+        android:text="Empty Message"
+        android:gravity="center"
+        android:layout_marginTop="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp" />
+
+
+
+</LinearLayout>

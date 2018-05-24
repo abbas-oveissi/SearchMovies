@@ -1,10 +1,9 @@
 apply plugin: 'com.android.application'
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion '27.0.3'
 
-    def versionMajor = 3
-    def versionMinor = 1
+    def versionMajor = 4
+    def versionMinor = 0
     def versionPatch = 0
 
 
@@ -14,6 +13,7 @@ android {
         targetSdkVersion rootProject.ext.compileSdkVersion
         versionCode versionMajor * 10000 + versionMinor * 100 + versionPatch
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
@@ -45,6 +45,7 @@ dependencies {
     implementation rootProject.ext.libraries.cardView
     implementation rootProject.ext.libraries.androidSupport4
     implementation rootProject.ext.libraries.designSupport
+    implementation rootProject.ext.libraries.constraintLayout
 
     implementation rootProject.ext.libraries.rxjava
     implementation rootProject.ext.libraries.rxandroid
@@ -71,6 +72,8 @@ dependencies {
 
     implementation rootProject.ext.libraries.materialsearchview
 
+    implementation rootProject.ext.libraries.calligraphy
+
 }
 
 android.applicationVariants.all { variant ->
@@ -89,7 +92,9 @@ android.applicationVariants.all { variant ->
 }
 
 // For app signing
-if (["storeFile", "storePassword", "keyAlias", "keyPassword"].count { !project.hasProperty(it) } == 0) {
+if (["storeFile", "storePassword", "keyAlias", "keyPassword"].count {
+    !project.hasProperty(it)
+} == 0) {
     android {
         signingConfigs {
             release {

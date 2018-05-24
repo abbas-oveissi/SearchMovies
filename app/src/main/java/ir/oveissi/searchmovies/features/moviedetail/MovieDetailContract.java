@@ -15,7 +15,11 @@ public interface MovieDetailContract {
 
         void showMovieDetail(Movie movie);
 
+        void showLoading();
 
+        void showData();
+
+        void showError(String error);
     }
 
     interface Presenter extends IPresenter<MovieDetailContract.View> {

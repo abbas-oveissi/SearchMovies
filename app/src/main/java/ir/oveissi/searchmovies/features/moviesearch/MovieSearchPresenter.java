@@ -18,16 +18,15 @@ package ir.oveissi.searchmovies.features.moviesearch;
 
 import android.util.Log;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 import ir.oveissi.searchmovies.interactors.MovieInteractor;
-import ir.oveissi.searchmovies.interactors.remote.GeneralApiException;
+import ir.oveissi.searchmovies.interactors.remote.exceptions.GeneralApiException;
 import ir.oveissi.searchmovies.pojo.Movie;
+import ir.oveissi.searchmovies.pojo.Pagination;
 import retrofit2.HttpException;
 
 public class MovieSearchPresenter implements MovieSearchContract.Presenter {
@@ -36,7 +35,7 @@ public class MovieSearchPresenter implements MovieSearchContract.Presenter {
     private MovieSearchContract.View viewLayer;
     private CompositeDisposable compositeDisposable;
     private final MovieInteractor mMovieInteractor;
-    private static final String TAG="MovieSearchPresenter";
+    private static final String TAG = "MovieSearchPresenter";
 
     @Inject
     public MovieSearchPresenter(MovieInteractor mMovieInteractor) {
@@ -44,11 +43,19 @@ public class MovieSearchPresenter implements MovieSearchContract.Presenter {
         this.mMovieInteractor = mMovieInteractor;
     }
 
+    Disposable disposable = null;
+
     @Override
-    public void onLoadMoviesByTitle(String title,int page) {
-        Disposable disposable=
-                mMovieInteractor.getMoviesByTitle(title,page)
-                        .subscribeWith(new DisposableObserver<List<Movie>>() {
+    public void onLoadMoviesByTitle(String title, int page) {
+        if (page == 1) {
+            if (disposable != null && !disposable.isDisposed()) {
+                disposable.dispose();
+            }
+            viewLayer.showLoading();
+        }
+        disposable =
+                mMovieInteractor.getMoviesByTitle(title, page)
+                        .subscribeWith(new DisposableObserver<Pagination<Movie>>() {
                             @Override
                             public void onComplete() {
                                 Log.d(TAG, "onCompleted: ");
@@ -57,24 +64,17 @@ public class MovieSearchPresenter implements MovieSearchContract.Presenter {
                             @Override
                             public void onError(Throwable e) {
                                 if (e instanceof HttpException) {
-                                    Log.d(TAG, "onError StatusCode: "+((HttpException) e).code());
+                                    viewLayer.showError("StatusCode: " + ((HttpException) e).code());
+                                } else if (e instanceof GeneralApiException) {
+                                    viewLayer.showError(((GeneralApiException) e).message);
+                                } else {
+                                    viewLayer.showError(e.getMessage());
                                 }
-                                else if(e instanceof GeneralApiException)
-                                {
-                                    Log.d(TAG, "onError message: "+((GeneralApiException) e).message);
-                                }
-                                else
-                                {
-                                    Log.d(TAG, "onError");
-                                }
-                                viewLayer.showToast("خطا رخ داد.");
-
                             }
 
                             @Override
-                            public void onNext(List<Movie> movies) {
-                                Log.d(TAG, "onNext");
-                                viewLayer.hideLoadingForMovies();
+                            public void onNext(Pagination<Movie> movies) {
+                                viewLayer.showData();
                                 viewLayer.showMoreMovies(movies);
                             }
                         });
@@ -83,17 +83,10 @@ public class MovieSearchPresenter implements MovieSearchContract.Presenter {
 
     @Override
     public void onSearchButtonClick(String terms) {
-
-        viewLayer.showLoadingForMovies();
         viewLayer.clearMovies();
-        onLoadMoviesByTitle(terms,1);
+        onLoadMoviesByTitle(terms, 1);
     }
 
-
-    @Override
-    public void subscribe() {
-
-    }
 
     @Override
     public void unsubscribe() {
@@ -102,6 +95,6 @@ public class MovieSearchPresenter implements MovieSearchContract.Presenter {
 
     @Override
     public void onViewAttached(MovieSearchContract.View view) {
-        viewLayer=view;
+        viewLayer = view;
     }
 }

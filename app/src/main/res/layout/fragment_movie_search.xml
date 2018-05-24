@@ -10,13 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/myToolbar"
-            app:titleTextColor="#FFFF"
-            android:background="@color/colorPrimary"
-            android:layout_width="match_parent"
-            android:minHeight="?attr/actionBarSize"
-            android:layout_height="wrap_content"/>
+        <include layout="@layout/toolbar"/>
 
         <com.miguelcatalan.materialsearchview.MaterialSearchView
             android:id="@+id/search_view"
@@ -24,11 +18,6 @@
             android:layout_height="wrap_content" />
     </FrameLayout>
 
-
-    <View
-        android:background="@color/colorPrimary"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"/>
     <ir.oveissi.searchmovies.utils.customviews.LoadingLayout
         android:id="@+id/loadinglayout"
         android:layout_width="match_parent"

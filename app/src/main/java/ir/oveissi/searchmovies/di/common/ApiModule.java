@@ -10,7 +10,6 @@ import dagger.Module;
 import dagger.Provides;
 import ir.oveissi.searchmovies.interactors.remote.ApiInterface;
 import ir.oveissi.searchmovies.interactors.remote.SearchMoviesApiService;
-import ir.oveissi.searchmovies.interactors.remote.SearchMoviesApiServiceImpl;
 import okhttp3.OkHttpClient;
 import retrofit2.CallAdapter;
 import retrofit2.Converter;
@@ -26,13 +25,13 @@ public class ApiModule {
 
     @Provides
     @Singleton
-    public static  SearchMoviesApiService provideSearchMoviesApiService(Retrofit retrofit) {
-        return new SearchMoviesApiServiceImpl(retrofit.create(ApiInterface.class));
+    public static SearchMoviesApiService provideSearchMoviesApiService(Retrofit retrofit) {
+        return new SearchMoviesApiService(retrofit.create(ApiInterface.class));
     }
 
     @Provides
     @Singleton
-    public  static Retrofit provideRetrofit(@Named("BaseUrl") String baseUrl, Converter.Factory converterFactory, CallAdapter.Factory callAdapterFactory, OkHttpClient okHttpClient) {
+    public static Retrofit provideRetrofit(@Named("BaseUrl") String baseUrl, Converter.Factory converterFactory, CallAdapter.Factory callAdapterFactory, OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(converterFactory)
@@ -43,20 +42,20 @@ public class ApiModule {
 
     @Singleton
     @Provides
-    public  static Gson provideGson() {
+    public static Gson provideGson() {
         return new Gson();
     }
 
 
     @Provides
     @Singleton
-    public  static CallAdapter.Factory provideRxJavaCallAdapterFactory() {
+    public static CallAdapter.Factory provideRxJavaCallAdapterFactory() {
         return RxJava2CallAdapterFactory.create();
     }
 
     @Provides
     @Singleton
-    public  static Converter.Factory provideGsonConverterFactory(Gson gson) {
+    public static Converter.Factory provideGsonConverterFactory(Gson gson) {
         return GsonConverterFactory.create(gson);
     }
 }

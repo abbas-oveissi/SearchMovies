@@ -29,15 +29,14 @@ public class EndlessLinearLayoutRecyclerview extends RecyclerView {
     @Override
     public void setLayoutManager(LayoutManager layout) {
 
-        if(!(layout instanceof LinearLayoutManager))
-        {
+        if (!(layout instanceof LinearLayoutManager)) {
             throw new RuntimeException();
         }
 
-        aeros=new AdvancedEndlessRecyclerOnScrollListener(layout) {
+        aeros = new AdvancedEndlessRecyclerOnScrollListener(layout) {
             @Override
             public void onLoadMore() {
-                if(onLoadMoreListener!=null)
+                if (onLoadMoreListener != null)
                     onLoadMoreListener.onLoadMore();
             }
         };
@@ -47,17 +46,17 @@ public class EndlessLinearLayoutRecyclerview extends RecyclerView {
     }
 
     private onLoadMoreListener onLoadMoreListener;
+
     public void setOnLoadMoreListener(EndlessLinearLayoutRecyclerview.onLoadMoreListener onLoadMoreListener) {
         this.onLoadMoreListener = onLoadMoreListener;
     }
-    public interface onLoadMoreListener
-    {
+
+    public interface onLoadMoreListener {
         void onLoadMore();
     }
 
 
-    public void setLoading(boolean enable)
-    {
+    public void setLoading(boolean enable) {
         this.aeros.setLoading(enable);
     }
 
@@ -65,27 +64,27 @@ public class EndlessLinearLayoutRecyclerview extends RecyclerView {
     public abstract class AdvancedEndlessRecyclerOnScrollListener extends RecyclerView.OnScrollListener {
         private int visibleThreshold = 3;
         private int lastVisibleItem, totalItemCount;
-        private boolean loading;
+        private boolean loading=true;
         private RecyclerView.LayoutManager linearLayoutManager;
-        public AdvancedEndlessRecyclerOnScrollListener(RecyclerView.LayoutManager linearLayoutManager)
-        {
+
+        public AdvancedEndlessRecyclerOnScrollListener(RecyclerView.LayoutManager linearLayoutManager) {
             this.linearLayoutManager = linearLayoutManager;
         }
+
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
 
             totalItemCount = linearLayoutManager.getItemCount();
-            lastVisibleItem =((LinearLayoutManager) linearLayoutManager).findLastVisibleItemPosition();
+            lastVisibleItem = ((LinearLayoutManager) linearLayoutManager).findLastVisibleItemPosition();
             if (!loading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
                 onLoadMore();
                 loading = true;
             }
         }
 
-        public void setLoading(boolean enable)
-        {
-            this.loading=enable;
+        public void setLoading(boolean enable) {
+            this.loading = enable;
         }
 
         public abstract void onLoadMore();

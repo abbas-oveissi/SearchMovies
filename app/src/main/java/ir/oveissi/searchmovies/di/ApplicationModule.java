@@ -31,7 +31,6 @@ public abstract class ApplicationModule {
     }
 
 
-
     @Provides
     @Singleton
     @Named("BaseUrl")
@@ -42,6 +41,6 @@ public abstract class ApplicationModule {
 
     @Binds
     @Singleton
-    public abstract SchedulerProvider provideAppScheduler(SchedulerProviderImpl schedulerProvider) ;
+    public abstract SchedulerProvider provideAppScheduler(SchedulerProviderImpl schedulerProvider);
 
 }

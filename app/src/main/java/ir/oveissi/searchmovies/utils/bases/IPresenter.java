@@ -18,8 +18,6 @@ package ir.oveissi.searchmovies.utils.bases;
 
 public interface IPresenter<T> {
 
-    void subscribe();
-
     void unsubscribe();
 
     /**

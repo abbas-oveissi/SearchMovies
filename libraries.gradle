@@ -2,7 +2,7 @@ ext {
     minSdkVersion = 17
     compileSdkVersion = 27
     buildToolsVersion = "27.0.0"
-    androidSupportVersion = "25.3.1"
+    androidSupportVersion = "27.1.1"
 
     libraries = [
             junit             : "junit:junit:4.12",
@@ -11,6 +11,8 @@ ext {
             designSupport    : "com.android.support:design:${androidSupportVersion}",
             cardView         : "com.android.support:cardview-v7:${androidSupportVersion}",
             recyclerView     : "com.android.support:recyclerview-v7:${androidSupportVersion}",
+
+            constraintLayout     : "com.android.support.constraint:constraint-layout:1.1.0",
 
             gson   : "com.google.code.gson:gson:2.6.2",
             picasso   : "com.squareup.picasso:picasso:2.5.2",
@@ -41,8 +43,9 @@ ext {
             firebaseMessaging : 'com.google.firebase:firebase-messaging:9.4.0',
 
             materialProgress : 'com.pnikosis:materialish-progress:1.7',
-            materialsearchview: 'com.miguelcatalan:materialsearchview:1.4.0'
+            materialsearchview: 'com.miguelcatalan:materialsearchview:1.4.0',
 
+            calligraphy: 'uk.co.chrisjenx:calligraphy:2.3.0'
     ]
 
 }

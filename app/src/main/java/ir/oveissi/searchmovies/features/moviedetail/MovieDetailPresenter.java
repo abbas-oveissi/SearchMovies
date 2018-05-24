@@ -24,16 +24,16 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 import ir.oveissi.searchmovies.interactors.MovieInteractor;
-import ir.oveissi.searchmovies.interactors.remote.GeneralApiException;
+import ir.oveissi.searchmovies.interactors.remote.exceptions.GeneralApiException;
 import ir.oveissi.searchmovies.pojo.Movie;
 import retrofit2.HttpException;
 
-public class MovieDetailPresenter  implements MovieDetailContract.Presenter {
+public class MovieDetailPresenter implements MovieDetailContract.Presenter {
 
     private MovieDetailContract.View viewLayer;
     private CompositeDisposable compositeDisposable;
     private final MovieInteractor mMovieInteractor;
-    private static final String TAG="MovieDetailPresenter";
+    private static final String TAG = "MovieDetailPresenter";
 
     @Inject
     public MovieDetailPresenter(MovieInteractor mMovieInteractor) {
@@ -43,7 +43,8 @@ public class MovieDetailPresenter  implements MovieDetailContract.Presenter {
 
     @Override
     public void onLoadMovieDetail(String id) {
-        Disposable disposable=
+        viewLayer.showLoading();
+        Disposable disposable =
                 mMovieInteractor.getMovieByID(id)
                         .subscribeWith(new DisposableObserver<Movie>() {
                             @Override
@@ -54,35 +55,24 @@ public class MovieDetailPresenter  implements MovieDetailContract.Presenter {
                             @Override
                             public void onError(Throwable e) {
                                 if (e instanceof HttpException) {
-                                    Log.d(TAG, "onError StatusCode: "+((HttpException) e).code());
+                                    viewLayer.showError("StatusCode: " + ((HttpException) e).code());
+                                } else if (e instanceof GeneralApiException) {
+                                    viewLayer.showError(((GeneralApiException) e).message);
+                                } else {
+                                    viewLayer.showError(e.getMessage());
                                 }
-                                else if(e instanceof GeneralApiException)
-                                {
-                                    Log.d(TAG, "onError message: "+((GeneralApiException) e).message);
-                                }
-                                else
-                                {
-                                    Log.d(TAG, "onError");
-                                }
-                                viewLayer.showToast("خطا رخ داد.");
                             }
 
                             @Override
                             public void onNext(Movie movie) {
                                 Log.d(TAG, "onNext");
-                                viewLayer.showMovieDetail(movie);
+                                viewLayer.showData();
                                 viewLayer.showMovieDetail(movie);
                             }
                         });
         compositeDisposable.add(disposable);
     }
 
-
-
-    @Override
-    public void subscribe() {
-
-    }
 
     @Override
     public void unsubscribe() {
@@ -91,6 +81,6 @@ public class MovieDetailPresenter  implements MovieDetailContract.Presenter {
 
     @Override
     public void onViewAttached(MovieDetailContract.View view) {
-        viewLayer=view;
+        viewLayer = view;
     }
 }

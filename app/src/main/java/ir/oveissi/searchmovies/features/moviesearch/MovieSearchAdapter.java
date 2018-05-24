@@ -27,55 +27,52 @@ public class MovieSearchAdapter extends RecyclerView.Adapter<MovieSearchAdapter.
     void setItemClickListener(ItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
+
     ItemClickListener itemClickListener;
+
     public interface ItemClickListener {
-        void ItemClicked(int position, Movie item,ImageView imPoster);
+        void ItemClicked(int position, Movie item);
     }
 
 
-    void clear()
-    {
+    void clear() {
         this.itemsData.clear();
         notifyDataSetChanged();
     }
-    void addItem(Movie post)
-    {
+
+    void addItem(Movie post) {
         this.itemsData.add(post);
-        notifyItemInserted(this.itemsData.size()-1);
+        notifyItemInserted(this.itemsData.size() - 1);
     }
 
     @Override
     public MovieSearchAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemLayoutView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.row_movie,  parent, false);
-        return new ViewHolder(itemLayoutView,mContext, this);
+                .inflate(R.layout.row_movie, parent, false);
+        return new ViewHolder(itemLayoutView);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        Movie tempItem=itemsData.get(position);
+        Movie tempItem = itemsData.get(position);
         viewHolder.bind(tempItem);
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        Context mcontext;
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tvMovieTitle;
-        final MovieSearchAdapter movieSearchAdapter;
         ImageView imPoster;
-        ViewHolder(View itemLayoutView, Context context, MovieSearchAdapter movieSearchAdapter) {
+
+        ViewHolder(View itemLayoutView) {
             super(itemLayoutView);
-            this.mcontext = context;
             tvMovieTitle = itemLayoutView.findViewById(R.id.tvMovieTitle);
-            this.movieSearchAdapter = movieSearchAdapter;
             imPoster = itemLayoutView.findViewById(R.id.imPoster);
             itemLayoutView.setOnClickListener(this);
 
         }
 
-        void bind(Movie item)
-        {
+        void bind(Movie item) {
             tvMovieTitle.setText(item.title);
-            Picasso.with(mcontext)
+            Picasso.with(mContext)
                     .load(item.poster)
                     .placeholder(R.drawable.placeholder)
                     .into(imPoster);
@@ -84,10 +81,9 @@ public class MovieSearchAdapter extends RecyclerView.Adapter<MovieSearchAdapter.
 
         @Override
         public void onClick(View v) {
-            if(movieSearchAdapter.itemClickListener!=null)
-            {
-                movieSearchAdapter.itemClickListener.ItemClicked(getAdapterPosition(),
-                        movieSearchAdapter.itemsData.get(getAdapterPosition()),imPoster);
+            if (itemClickListener != null) {
+                itemClickListener.ItemClicked(getAdapterPosition(),
+                        itemsData.get(getAdapterPosition()));
             }
 
         }

@@ -16,19 +16,37 @@
 
 package ir.oveissi.searchmovies.interactors;
 
-import java.util.List;
+
+import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import ir.oveissi.searchmovies.interactors.remote.SearchMoviesApiService;
 import ir.oveissi.searchmovies.pojo.Movie;
+import ir.oveissi.searchmovies.pojo.Pagination;
+import ir.oveissi.searchmovies.utils.SchedulerProvider;
 
-/**
- * Main entry point for accessing tasks data.
- * <p>
- */
-public interface MovieInteractor {
 
-    Observable<List<Movie>> getMoviesByTitle(String query, Integer page);
+public class MovieInteractor {
 
-    Observable<Movie> getMovieByID(String id);
+    private final SearchMoviesApiService searchMoviesApiService;
+    private final SchedulerProvider scheduler;
+
+    @Inject
+    public MovieInteractor(SearchMoviesApiService searchMoviesApiService, SchedulerProvider scheduler) {
+        this.searchMoviesApiService = searchMoviesApiService;
+        this.scheduler = scheduler;
+    }
+
+    public Observable<Pagination<Movie>> getMoviesByTitle(String title, Integer page) {
+        return this.searchMoviesApiService.getMoviesByTitle(title, page)
+                .subscribeOn(scheduler.backgroundThread())
+                .observeOn(scheduler.mainThread());
+    }
+
+    public Observable<Movie> getMovieByID(String movieId) {
+        return this.searchMoviesApiService.getMovieById(movieId)
+                .subscribeOn(scheduler.backgroundThread())
+                .observeOn(scheduler.mainThread());
+    }
 
 }

@@ -12,15 +12,16 @@ import dagger.android.HasActivityInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 import ir.oveissi.searchmovies.di.ApplicationComponent;
 import ir.oveissi.searchmovies.di.DaggerApplicationComponent;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
  * Created by abbas on 10/20/16.
  */
 
-public class SearchMovieApplication extends Application implements HasActivityInjector {
+public class SearchMovieApplication extends Application implements HasSupportFragmentInjector {
 
     @Inject
-    DispatchingAndroidInjector<Activity> dispatchingAndroidInjector;
+    DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
 
     @Override
     public void onCreate() {
@@ -31,7 +32,11 @@ public class SearchMovieApplication extends Application implements HasActivityIn
                 .build();
         component.inject(this);
 
-
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("vazir.ttf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
     }
 
     private static ApplicationComponent component;
@@ -41,7 +46,7 @@ public class SearchMovieApplication extends Application implements HasActivityIn
     }
 
     @Override
-    public AndroidInjector<Activity> activityInjector() {
+    public AndroidInjector<Fragment> supportFragmentInjector() {
         return dispatchingAndroidInjector;
     }
 }

@@ -1,4 +1,4 @@
-package ir.oveissi.searchmovies.interactors.remote;
+package ir.oveissi.searchmovies.interactors.remote.exceptions;
 
 import retrofit2.Response;
 
@@ -6,7 +6,7 @@ import retrofit2.Response;
  * Created by abbas on 6/15/17.
  */
 
-public class GeneralApiException extends Exception{
+public class GeneralApiException extends Exception {
     public String message;
     public String errors;
 
@@ -17,12 +17,16 @@ public class GeneralApiException extends Exception{
         this.response = response;
     }
 
-    /** HTTP status code. */
+    /**
+     * HTTP status code.
+     */
     public int code() {
         return response.code();
     }
 
-    /** HTTP status message. */
+    /**
+     * HTTP status message.
+     */
     public String message() {
         return message;
     }
