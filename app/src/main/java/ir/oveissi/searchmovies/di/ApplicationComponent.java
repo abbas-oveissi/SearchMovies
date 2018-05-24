@@ -5,12 +5,11 @@ import javax.inject.Singleton;
 
 import dagger.BindsInstance;
 import dagger.Component;
+import dagger.android.AndroidInjectionModule;
 import ir.oveissi.searchmovies.SearchMovieApplication;
 import ir.oveissi.searchmovies.di.common.ApiModule;
 import ir.oveissi.searchmovies.di.common.ClientModule;
-import ir.oveissi.searchmovies.features.moviedetail.MovieDetailComponent;
 import ir.oveissi.searchmovies.features.moviedetail.MovieDetailPresenterModule;
-import ir.oveissi.searchmovies.features.moviesearch.MovieSearchComponent;
 import ir.oveissi.searchmovies.features.moviesearch.MovieSearchPresenterModule;
 
 
@@ -19,14 +18,14 @@ import ir.oveissi.searchmovies.features.moviesearch.MovieSearchPresenterModule;
         AndroidModule.class,
         ApplicationModule.class,
         ApiModule.class,
+        AndroidInjectionModule.class,
+        ActivityBuilder.class,
         InteractorModule.class,
         ClientModule.class,
 })
 public interface ApplicationComponent {
 
-    MovieDetailComponent plus(MovieDetailPresenterModule module);
-    MovieSearchComponent plus(MovieSearchPresenterModule module);
-
+    void inject(SearchMovieApplication __);
 
     @Component.Builder
     interface Builder

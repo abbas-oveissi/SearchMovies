@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    buildToolsVersion '27.0.3'
 
     def versionMajor = 3
-    def versionMinor = 0
+    def versionMinor = 1
     def versionPatch = 0
 
 
@@ -38,35 +38,38 @@ android {
 
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile rootProject.ext.libraries.junit
-    compile rootProject.ext.libraries.appCompat
-    compile rootProject.ext.libraries.recyclerView
-    compile rootProject.ext.libraries.cardView
-    compile rootProject.ext.libraries.androidSupport4
-    compile rootProject.ext.libraries.designSupport
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation rootProject.ext.libraries.junit
+    implementation rootProject.ext.libraries.appCompat
+    implementation rootProject.ext.libraries.recyclerView
+    implementation rootProject.ext.libraries.cardView
+    implementation rootProject.ext.libraries.androidSupport4
+    implementation rootProject.ext.libraries.designSupport
 
-    compile rootProject.ext.libraries.rxjava
-    compile rootProject.ext.libraries.rxandroid
-    compile rootProject.ext.libraries.rxbinding
+    implementation rootProject.ext.libraries.rxjava
+    implementation rootProject.ext.libraries.rxandroid
+    implementation rootProject.ext.libraries.rxbinding
 
-    compile rootProject.ext.libraries.butterknife
+    implementation rootProject.ext.libraries.butterknife
     annotationProcessor rootProject.ext.libraries.butterknifeCompiler
 
-    compile rootProject.ext.libraries.retrofit
-    compile rootProject.ext.libraries.retrofitConverter
-    compile rootProject.ext.libraries.retrofitAdapter
-    compile rootProject.ext.libraries.okhttpLogging
-    compile rootProject.ext.libraries.okhttp3
+    implementation rootProject.ext.libraries.retrofit
+    implementation rootProject.ext.libraries.retrofitConverter
+    implementation rootProject.ext.libraries.retrofitAdapter
+    implementation rootProject.ext.libraries.okhttpLogging
+    implementation rootProject.ext.libraries.okhttp3
 
-    compile rootProject.ext.libraries.picasso
+    implementation rootProject.ext.libraries.picasso
 
-    compile rootProject.ext.libraries.dagger
+    implementation rootProject.ext.libraries.dagger
+    implementation rootProject.ext.libraries.daggerAndroid
+    implementation rootProject.ext.libraries.daggerSupport
     annotationProcessor rootProject.ext.libraries.daggerCompiler
+    annotationProcessor rootProject.ext.libraries.daggerAndroidCompiler
 
-    compile rootProject.ext.libraries.materialProgress
+    implementation rootProject.ext.libraries.materialProgress
 
-    compile rootProject.ext.libraries.materialsearchview
+    implementation rootProject.ext.libraries.materialsearchview
 
 }
 

@@ -18,8 +18,11 @@ ext {
             butterknife      : "com.jakewharton:butterknife:8.0.1",
             butterknifeCompiler: "com.jakewharton:butterknife-compiler:8.0.1",
 
-            dagger           : "com.google.dagger:dagger:2.11",
-            daggerCompiler     : "com.google.dagger:dagger-compiler:2.11",
+            dagger           : "com.google.dagger:dagger:2.16",
+            daggerCompiler     : "com.google.dagger:dagger-compiler:2.16",
+            daggerAndroid     : "com.google.dagger:dagger-android:2.16",
+            daggerSupport     : "com.google.dagger:dagger-android-support:2.16",
+            daggerAndroidCompiler     : "com.google.dagger:dagger-android-processor:2.16",
 
             rxjava           : "io.reactivex.rxjava2:rxjava:2.1.0",
             rxandroid        : "io.reactivex.rxjava2:rxandroid:2.0.1",

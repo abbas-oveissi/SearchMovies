@@ -16,6 +16,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import dagger.android.AndroidInjection;
 import ir.oveissi.searchmovies.R;
 import ir.oveissi.searchmovies.SearchMovieApplication;
 import ir.oveissi.searchmovies.pojo.Movie;
@@ -50,8 +51,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SearchMovieApplication.getComponent().plus(new MovieDetailPresenterModule()).inject(this);
-
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
         ButterKnife.bind(this);

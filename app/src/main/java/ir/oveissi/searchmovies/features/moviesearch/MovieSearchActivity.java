@@ -23,6 +23,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.android.AndroidInjection;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
@@ -63,8 +64,7 @@ public class MovieSearchActivity extends AppCompatActivity implements MovieSearc
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SearchMovieApplication.getComponent().plus(new MovieSearchPresenterModule()).inject(this);
-
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_search);
         ButterKnife.bind(this);
