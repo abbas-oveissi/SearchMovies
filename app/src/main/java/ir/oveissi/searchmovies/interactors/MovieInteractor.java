@@ -19,7 +19,7 @@ package ir.oveissi.searchmovies.interactors;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
+import io.reactivex.Flowable;
 import ir.oveissi.searchmovies.interactors.remote.SearchMoviesApiService;
 import ir.oveissi.searchmovies.pojo.Movie;
 import ir.oveissi.searchmovies.pojo.Pagination;
@@ -37,13 +37,13 @@ public class MovieInteractor {
         this.scheduler = scheduler;
     }
 
-    public Observable<Pagination<Movie>> getMoviesByTitle(String title, Integer page) {
+    public Flowable<Pagination<Movie>> getMoviesByTitle(String title, Integer page) {
         return this.searchMoviesApiService.getMoviesByTitle(title, page)
                 .subscribeOn(scheduler.backgroundThread())
                 .observeOn(scheduler.mainThread());
     }
 
-    public Observable<Movie> getMovieByID(String movieId) {
+    public Flowable<Movie> getMovieByID(String movieId) {
         return this.searchMoviesApiService.getMovieById(movieId)
                 .subscribeOn(scheduler.backgroundThread())
                 .observeOn(scheduler.mainThread());

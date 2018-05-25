@@ -1,6 +1,8 @@
 package ir.oveissi.searchmovies.features.moviedetail;
 
 import android.app.Activity;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -22,6 +23,8 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.AndroidSupportInjection;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.subscribers.ResourceSubscriber;
 import ir.oveissi.searchmovies.R;
 import ir.oveissi.searchmovies.pojo.Movie;
 import ir.oveissi.searchmovies.utils.bases.BaseFragment;
@@ -29,10 +32,8 @@ import ir.oveissi.searchmovies.utils.bases.FragmentInteractionListener;
 import ir.oveissi.searchmovies.utils.customviews.LoadingLayout;
 
 
-public class MovieDetailFragment extends BaseFragment implements MovieDetailContract.View {
+public class MovieDetailFragment extends BaseFragment {
 
-
-    private String movie_id;
 
     @BindView(R.id.loadinglayout)
     LoadingLayout loadinglayout;
@@ -46,11 +47,14 @@ public class MovieDetailFragment extends BaseFragment implements MovieDetailCont
     @BindView(R.id.imPoster)
     ImageView imPoster;
 
+    @Inject
+    ViewModelProvider.Factory mViewModelFactory;
+
+    private String movie_id;
+    MovieDetailViewModel movieDetailViewModel;
+    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
     private OnMovieDtailFragmentInteractionListener mListener;
     private AppCompatActivity activity;
-
-    @Inject
-    public MovieDetailContract.Presenter mPresenter;
 
 
     public MovieDetailFragment() {
@@ -71,6 +75,27 @@ public class MovieDetailFragment extends BaseFragment implements MovieDetailCont
         if (getArguments() != null) {
             movie_id = getArguments().getString("movie_id");
         }
+
+        movieDetailViewModel = ViewModelProviders.of(this, mViewModelFactory)
+                .get(MovieDetailViewModel.class);
+
+        if (savedInstanceState == null) {
+            movieDetailViewModel.getMovieDetailFromNetwork(Integer.valueOf(movie_id));
+        }
+
+    }
+
+    private void render(MovieDetailViewState state) {
+        if (state instanceof MovieDetailViewState.Loading) {
+            loadinglayout.setState(LoadingLayout.STATE_LOADING);
+        } else if (state instanceof MovieDetailViewState.Error) {
+            loadinglayout.setErrorText("error");
+            loadinglayout.setErrorClickListener(() -> movieDetailViewModel.getMovieDetailFromNetwork(Integer.valueOf(movie_id)));
+        } else if (state instanceof MovieDetailViewState.Data) {
+            loadinglayout.setState(LoadingLayout.STATE_SHOW_DATA);
+            showMovieDetail(((MovieDetailViewState.Data) state).movie);
+
+        }
     }
 
     @Override
@@ -89,9 +114,23 @@ public class MovieDetailFragment extends BaseFragment implements MovieDetailCont
         activity.getSupportActionBar().setTitle("");
 
 
-        mPresenter.onViewAttached(this);
-        mPresenter.onLoadMovieDetail(movie_id);
+        mCompositeDisposable.add(movieDetailViewModel.getViewState()
+                .subscribeWith(new ResourceSubscriber<MovieDetailViewState>() {
+                    @Override
+                    public void onNext(MovieDetailViewState movieDetailViewState) {
+                        render(movieDetailViewState);
+                    }
 
+                    @Override
+                    public void onError(Throwable t) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                }));
     }
 
     @Override
@@ -115,26 +154,10 @@ public class MovieDetailFragment extends BaseFragment implements MovieDetailCont
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mPresenter.unsubscribe();
+        mCompositeDisposable.dispose();
     }
 
-    public void showLoading() {
-        loadinglayout.setState(LoadingLayout.STATE_LOADING);
 
-    }
-
-    public void showData() {
-        if (loadinglayout.getState() != LoadingLayout.STATE_SHOW_DATA)
-            loadinglayout.setState(LoadingLayout.STATE_SHOW_DATA);
-    }
-
-    @Override
-    public void showError(String error) {
-        loadinglayout.setErrorText(error);
-        loadinglayout.setErrorClickListener(() -> mPresenter.onLoadMovieDetail(movie_id));
-    }
-
-    @Override
     public void showMovieDetail(Movie movie) {
         activity.getSupportActionBar().setTitle(movie.title);
 
@@ -147,12 +170,6 @@ public class MovieDetailFragment extends BaseFragment implements MovieDetailCont
                 .networkPolicy(NetworkPolicy.OFFLINE)
                 .into(imPoster);
     }
-
-    @Override
-    public void showToast(String txt) {
-        Toast.makeText(getContext(), txt, Toast.LENGTH_SHORT).show();
-    }
-
 
     @Override
     public void onDetach() {

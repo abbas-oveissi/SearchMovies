@@ -45,6 +45,12 @@ public class MovieSearchAdapter extends RecyclerView.Adapter<MovieSearchAdapter.
         notifyItemInserted(this.itemsData.size() - 1);
     }
 
+    void addAll(List<Movie> movies) {
+        this.itemsData.addAll(movies);
+        notifyDataSetChanged();
+    }
+
+
     @Override
     public MovieSearchAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemLayoutView = LayoutInflater.from(parent.getContext())

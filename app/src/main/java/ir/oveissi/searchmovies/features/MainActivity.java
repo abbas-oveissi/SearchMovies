@@ -23,11 +23,12 @@ public class MainActivity extends BaseActivity implements HasNavigationManager,
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        navigationManager = new NavigationManager(getSupportFragmentManager(), R.id.container);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        navigationManager = new NavigationManager(getSupportFragmentManager(), R.id.container);
 
         if (savedInstanceState == null) {
             navigationManager.openAsRoot(MovieSearchFragment.newInstance());

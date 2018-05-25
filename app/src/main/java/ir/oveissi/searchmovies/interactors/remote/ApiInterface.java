@@ -1,6 +1,6 @@
 package ir.oveissi.searchmovies.interactors.remote;
 
-import io.reactivex.Observable;
+import io.reactivex.Flowable;
 import ir.oveissi.searchmovies.pojo.Movie;
 import ir.oveissi.searchmovies.pojo.Pagination;
 import retrofit2.http.GET;
@@ -14,9 +14,9 @@ public interface ApiInterface {
 
     //http://moviesapi.ir/api/v1/movies?q=[QUERY]
     @GET("movies")
-    Observable<Pagination<Movie>> getMoviesByTitle(@Query("q") String query, @Query("page") Integer page);
+    Flowable<Pagination<Movie>> getMoviesByTitle(@Query("q") String query, @Query("page") Integer page);
 
     //http://moviesapi.ir/api/v1/movies/{ID}
     @GET("movies/{id}")
-    Observable<Movie> getMovieById(@Path("id") String id);
+    Flowable<Movie> getMovieById(@Path("id") String id);
 }

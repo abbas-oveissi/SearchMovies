@@ -1,6 +1,8 @@
 package ir.oveissi.searchmovies.features.moviesearch;
 
 import android.app.Activity;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,34 +17,29 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.AndroidSupportInjection;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.subscribers.ResourceSubscriber;
 import ir.oveissi.searchmovies.R;
 import ir.oveissi.searchmovies.features.moviedetail.MovieDetailFragment;
 import ir.oveissi.searchmovies.pojo.Movie;
-import ir.oveissi.searchmovies.pojo.Pagination;
 import ir.oveissi.searchmovies.utils.bases.BaseFragment;
 import ir.oveissi.searchmovies.utils.bases.FragmentInteractionListener;
 import ir.oveissi.searchmovies.utils.customviews.EndlessLinearLayoutRecyclerview;
 import ir.oveissi.searchmovies.utils.customviews.LoadingLayout;
 
-import static ir.oveissi.searchmovies.utils.Utility.isNotNullOrEmpty;
 
-
-public class MovieSearchFragment extends BaseFragment implements MovieSearchContract.View, MovieSearchAdapter.ItemClickListener {
+public class MovieSearchFragment extends BaseFragment implements  MovieSearchAdapter.ItemClickListener {
 
 
     private MovieSearchAdapter mListAdapter;
@@ -66,13 +63,27 @@ public class MovieSearchFragment extends BaseFragment implements MovieSearchCont
 
     public int current_page = 1;
 
+
     @Inject
-    public MovieSearchContract.Presenter mPresenter;
+    ViewModelProvider.Factory mViewModelFactory;
+
+    MovieSearchViewModel movieSearchViewModel;
+    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
+
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        movieSearchViewModel = ViewModelProviders.of(this, mViewModelFactory)
+                .get(MovieSearchViewModel.class);
+
+        if (savedInstanceState == null) {
+            movieSearchViewModel.getMovies("");
+        }
+
+
     }
 
     public MovieSearchFragment() {
@@ -94,7 +105,6 @@ public class MovieSearchFragment extends BaseFragment implements MovieSearchCont
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
-        mPresenter.onViewAttached(this);
         current_page = 1;
 
         activity.setSupportActionBar(toolbar);
@@ -103,11 +113,10 @@ public class MovieSearchFragment extends BaseFragment implements MovieSearchCont
 
         mListAdapter = new MovieSearchAdapter(getActivity(), new ArrayList<>());
         mListAdapter.setItemClickListener(this);
-
         rvMovies.setAdapter(mListAdapter);
         rvMovies.setLayoutManager(new LinearLayoutManager(getContext()));
         rvMovies.setOnLoadMoreListener(() -> {
-            mPresenter.onLoadMoviesByTitle(title, current_page);
+            movieSearchViewModel.getMoreMovies();
         });
 
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
@@ -123,21 +132,51 @@ public class MovieSearchFragment extends BaseFragment implements MovieSearchCont
             }
         });
 
-        RxTextView.textChanges(searchView.getRootView().findViewById(R.id.searchTextView))
-                .filter(charSequence -> isNotNullOrEmpty(charSequence.toString()))
-                .debounce(1000, TimeUnit.MILLISECONDS).map(CharSequence::toString)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::submitQuery);
+        mCompositeDisposable.add(movieSearchViewModel
+                .getViewState()
+                .subscribeWith(new ResourceSubscriber<MovieSearchViewState>() {
+                    @Override
+                    public void onNext(MovieSearchViewState movieDetailViewState) {
+                        render(movieDetailViewState);
+                    }
 
-        mPresenter.onLoadMoviesByTitle(title, 1);
+                    @Override
+                    public void onError(Throwable t) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                }));
+
+
     }
 
     private void submitQuery(String inputSearch) {
-        current_page = 1;
-        title = inputSearch;
-        mPresenter.onSearchButtonClick(inputSearch);
+        movieSearchViewModel.getMovies(inputSearch);
     }
+
+
+    private void render(MovieSearchViewState state) {
+        if (state instanceof MovieSearchViewState.Loading) {
+            loadinglayout.setState(LoadingLayout.STATE_LOADING);
+        } else if (state instanceof MovieSearchViewState.Error) {
+            loadinglayout.setErrorText(((MovieSearchViewState.Error) state).message);
+            Log.e("MyLog",((MovieSearchViewState.Error) state).message);
+            loadinglayout.setErrorClickListener(() -> movieSearchViewModel.getMovies(""));
+        } else if (state instanceof MovieSearchViewState.Data) {
+            if(loadinglayout.getState()!=LoadingLayout.STATE_SHOW_DATA)
+            {
+                loadinglayout.setState(LoadingLayout.STATE_SHOW_DATA);
+
+            }
+            showMoreMovies(((MovieSearchViewState.Data) state).movie,((MovieSearchViewState.Data) state).lastPage);
+
+        }
+    }
+
 
 
     @Override
@@ -159,7 +198,8 @@ public class MovieSearchFragment extends BaseFragment implements MovieSearchCont
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mPresenter.unsubscribe();
+        mCompositeDisposable.dispose();
+
     }
 
     @Override
@@ -180,45 +220,11 @@ public class MovieSearchFragment extends BaseFragment implements MovieSearchCont
     public interface OnMovieSearchFragmentInteractionListener extends FragmentInteractionListener {
     }
 
-    public void clearMovies() {
-        mListAdapter.clear();
-    }
-
-    @Override
-    public void showToast(String txt) {
-        Toast.makeText(getContext(), txt, Toast.LENGTH_SHORT).show();
-    }
-
-
-    public void showLoading() {
-        loadinglayout.setState(LoadingLayout.STATE_LOADING);
-
-    }
-
-    public void showData() {
-        if (loadinglayout.getState() != LoadingLayout.STATE_SHOW_DATA)
-            loadinglayout.setState(LoadingLayout.STATE_SHOW_DATA);
-    }
-
-    @Override
-    public void showError(String error) {
-        loadinglayout.setErrorText(error);
-        loadinglayout.setErrorClickListener(() -> {
-                    current_page = 1;
-                    mPresenter.onSearchButtonClick(title);
-                }
-        );
-    }
-
-    @Override
-    public void showMoreMovies(Pagination<Movie> movies) {
-        int lastPage = (movies.metadata.total_count / movies.metadata.per_page) + 1;
-        if (movies.metadata.current_page != lastPage)
+    public void showMoreMovies(List<Movie> movies,boolean lastpage) {
+        if (!lastpage)
             rvMovies.setLoading(false);
-        current_page++;
-        for (Movie p : movies.data) {
-            mListAdapter.addItem(p);
-        }
+        mListAdapter.clear();
+        mListAdapter.addAll(movies);
     }
 
 

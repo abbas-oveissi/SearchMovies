@@ -39,6 +39,10 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation rootProject.ext.libraries.arcViewModel
+    implementation rootProject.ext.libraries.arcExtension
+    implementation rootProject.ext.libraries.arcReactiveStream
+
     testImplementation rootProject.ext.libraries.junit
     implementation rootProject.ext.libraries.appCompat
     implementation rootProject.ext.libraries.recyclerView

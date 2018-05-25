@@ -14,6 +14,10 @@ ext {
 
             constraintLayout     : "com.android.support.constraint:constraint-layout:1.1.0",
 
+            arcViewModel    : "android.arch.lifecycle:viewmodel:1.1.1",
+            arcExtension         : "android.arch.lifecycle:extensions:1.1.1",
+            arcReactiveStream     : "android.arch.lifecycle:reactivestreams:1.1.1",
+
             gson   : "com.google.code.gson:gson:2.6.2",
             picasso   : "com.squareup.picasso:picasso:2.5.2",
 

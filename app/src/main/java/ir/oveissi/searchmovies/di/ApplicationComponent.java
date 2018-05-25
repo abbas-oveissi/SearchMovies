@@ -9,6 +9,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
 import ir.oveissi.searchmovies.SearchMovieApplication;
 import ir.oveissi.searchmovies.di.common.ApiModule;
 import ir.oveissi.searchmovies.di.common.ClientModule;
+import ir.oveissi.searchmovies.di.common.ViewModelModule;
 
 
 @Singleton
@@ -16,6 +17,7 @@ import ir.oveissi.searchmovies.di.common.ClientModule;
         AndroidModule.class,
         ApplicationModule.class,
         ApiModule.class,
+        ViewModelModule.class,
         AndroidSupportInjectionModule.class,
         FragmentBuilder.class,
         ClientModule.class,
